@@ -1,5 +1,5 @@
-<PIL.Image.Image image mode=RGBA size=2177x1695 at 0x10A5ED7C0>
-<PIL.Image.Image image mode=RGBA size=2183x1704 at 0x1190B25E0>,0,-1
-<PIL.Image.Image image mode=RGBA size=776x459 at 0x1196370A0>,2,0
-<PIL.Image.Image image mode=RGBA size=482x481 at 0x10A5ED7C0>,1,0
-<PIL.Image.Image image mode=RGBA size=522x495 at 0x1196370A0>,1,0
+<PIL.Image.Image image mode=RGBA size=2177x1695 at 0x106278F70>
+0,<PIL.Image.Image image mode=RGBA size=2183x1704 at 0x116AF8910>,0,-1,2306609.0
+1,<PIL.Image.Image image mode=RGBA size=776x459 at 0x1173ED9A0>,2,0,248978.5
+2,<PIL.Image.Image image mode=RGBA size=482x481 at 0x106278FA0>,1,0,160501.5
+3,<PIL.Image.Image image mode=RGBA size=522x495 at 0x1173ED9A0>,1,0,176059.0
