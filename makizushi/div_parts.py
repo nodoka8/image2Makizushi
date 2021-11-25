@@ -91,12 +91,12 @@ def div_parts(imagename):
         bbox = [box[0]-5, box[1]-5, box[2]+5, box[3]+5]
         output = copy.crop(bbox)
         output.save(imagename + str(i) + '.png')
-        csv_w([output, matches[i], hierarchy[i][3], rice[i]], 'a')
+        csv_w([i, output, matches[i], hierarchy[i][3], rice[i]], 'a')
 
 def calc_rice(imagename):
     contours = find_contours(imagename, cv2.THRESH_BINARY)[0]
     hierarchy = find_contours(imagename, cv2.THRESH_BINARY)[1]
-    rice = []
+    rice = [0, 0, 0, 0]
     for i in range(len(contours)):
         rice[i] = cv2.contourArea(contours[i])
         if hierarchy[i][3] != -1:
