@@ -10,6 +10,7 @@ public class GuideData : MonoBehaviour
     public Image outputimage;
 
     public List<int> ind_id = new List<int>(); //独立パーツ番号
+    public List<int> ind_shapeid = new List<int>(); //独立パーツ形状番号
     public List<Color> ind_color = new List<Color>(); //独立パーツカラー
     public List<Image> ind_image = new List<Image>(); //独立パーツ画像
     public List<float> ind_noriwidth = new List<float>(); //独立パーツ海苔横
@@ -18,6 +19,9 @@ public class GuideData : MonoBehaviour
     public List<int>　parent_id = new List<int>(); //親パーツ番号
     public List<Image> parent_image = new List<Image>(); //親パーツ画像
     public List<Image> parent_idimage = new List<Image>(); //パーツID変換画像
+
+    public List<int> parent_num = new List<int>(); //内包パーツ数
+
 
     public List<float> parent_noriwidth = new List<float>(); //親パーツ海苔横
     public List<float> parent_noriheight = new List<float>(); //親パーツ海苔縦
