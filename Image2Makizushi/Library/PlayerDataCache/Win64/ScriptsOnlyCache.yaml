@@ -54,31 +54,31 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11356}
     - Class: 114
-      Script: {instanceID: 11388}
+      Script: {instanceID: 11396}
     - Class: 114
-      Script: {instanceID: 11726}
+      Script: {instanceID: 11734}
     - Class: 114
-      Script: {instanceID: 11778}
+      Script: {instanceID: 11786}
     - Class: 114
-      Script: {instanceID: 12560}
+      Script: {instanceID: 12568}
     - Class: 114
-      Script: {instanceID: 12632}
+      Script: {instanceID: 12640}
     - Class: 114
-      Script: {instanceID: 12744}
+      Script: {instanceID: 12752}
     - Class: 114
-      Script: {instanceID: 13442}
+      Script: {instanceID: 13450}
     - Class: 114
-      Script: {instanceID: 13884}
+      Script: {instanceID: 13892}
     - Class: 114
-      Script: {instanceID: 13908}
+      Script: {instanceID: 13916}
     - Class: 114
-      Script: {instanceID: 14402}
+      Script: {instanceID: 14410}
     - Class: 114
-      Script: {instanceID: 14746}
+      Script: {instanceID: 14754}
     - Class: 114
-      Script: {instanceID: 14956}
+      Script: {instanceID: 14964}
     - Class: 114
-      Script: {instanceID: 15160}
+      Script: {instanceID: 15168}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -710,7 +710,7 @@ ScriptsOnlyBuild:
     className: VertexShakeA
   - hash:
       serializedVersion: 2
-      Hash: c506f9f69b8c714e2c154b939fb1a181
+      Hash: cf4bedc47fda051d7a679ee6bea469b3
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GuideData
@@ -807,4 +807,4 @@ ScriptsOnlyBuild:
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: "C:/Users/cerez/OneDrive/\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7/Makizushi/Image2Makizushi.exe"
+  playerPath: "C:/Users/cerez/OneDrive/\u30C9\u30AD\u30E5\u30E1\u30F3\u30C8/Github/image2Makizushi/makizushi/Image2Makizushi.exe"

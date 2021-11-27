@@ -36,6 +36,7 @@ public class CSVLoader : MonoBehaviour
         {
             string line = reader.ReadLine(); // 一行ずつ読み込み
             csvDatas.Add(line.Split(',')); // , 区切りでリストに追加
+
         }
 
         // csvDatas[行][列]を指定して値を自由に取り出せる
@@ -51,7 +52,11 @@ public class CSVLoader : MonoBehaviour
             using (StreamReader sr = new StreamReader(fi.OpenRead(), Encoding.UTF8))
             {
                 string readTxt = sr.ReadToEnd();
-                Debug.Log(readTxt);
+                string[] arr = readTxt.Split(',');
+
+                guideData.ind_shapeid.Add(int.Parse(arr[1]));
+                guideData.parent_num.Add(int.Parse(arr[2]));
+                Debug.Log(guideData.ind_shapeid);
             }
         }
         catch (Exception e)
