@@ -7,7 +7,6 @@ import csv
 imagename = "me"
 #画像の読み込み
 image = Image.open(imagename + ".png")
-print(type(image))
 
 #-------csv書き込み--------
 def csv_w(row, mode):
@@ -29,13 +28,14 @@ def find_contours(imagename, mode):
     #labels_list = list(labels[0])
     for i in reversed(range(len(contours_list))):
         if cv2.contourArea(contours_list[i]) < 30:
+            if hierarchy_list[i][1] != -1:
+                hierarchy_list[hierarchy_list[i][1]][0] = hierarchy_list[i][0]
+            if hierarchy_list[i][0] != -1:
+                hierarchy_list[hierarchy_list[i][0]][1] = hierarchy_list[i][1]
+            if hierarchy_list[i][3] != -1 and hierarchy_list[hierarchy_list[i][3]][2] == i:
+                hierarchy_list[hierarchy_list[i][3]][2] = hierarchy_list[i][0]
             contours_list.pop(i)
             hierarchy_list.pop(i)
-            #for j in range(len(contours_list)):
-                #if hierarchy_list[j][2] == i:
-                    #hierarchy_list[j][2] = hierarchy_list[i][2]
-                #if hierarchy_list[j][3] == i:
-                    #hierarchy_list[j][3] = 
             #labels_list.pop(i)
     return [contours_list, hierarchy_list]
 
@@ -78,6 +78,13 @@ def calc_rice(imagename):
             rice[hierarchy[i][3]] = rice[hierarchy[i][3]] - rice[i]
     return rice
 
+def count_child(n, hierarchy):
+    count = 0
+    for i in range(len(hierarchy)):
+        if hierarchy[i][3] == n:
+            count = count + 1
+    return count
+
 def div_parts(imagename):
     contours = find_contours(imagename, cv2.THRESH_BINARY)[0]
     hierarchy = find_contours(imagename, cv2.THRESH_BINARY)[1]
@@ -96,13 +103,15 @@ def div_parts(imagename):
             min(p[0], c[0]), min(p[1], c[1]),
             max(p[2], c[0]), max(p[3], c[1])
         ], area, [image.width, image.height, 0, 0])
+        print(area[i][0])
         bbox = [box[0]-5, box[1]-5, box[2]+5, box[3]+5]
         output = copy.crop(bbox)
         image_name = imagename + str(i) + '.png'
         output.save(image_name)
-        csv_w([i, image_name, matches[i], hierarchy[i][3], hierarchy[i][2], rice[i]], 'a')
+        csv_w([i, image_name, matches[i], hierarchy[i][2], hierarchy[i][3], image.getpixel(area[i]), count_child(i, hierarchy), rice[i]], 'a')
 
-image_numberdraw(imagename)       
+csv_w(["パーツ番号", "パーツ画像", "-1だったら独立パーツ", "親パーツ番号", "パーツカラー", "内包パーツ数", "ご飯の量(パーツサイズ)"], "w")
+#image_numberdraw(imagename)       
 div_parts(imagename)
 
 
