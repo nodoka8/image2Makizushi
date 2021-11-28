@@ -3,14 +3,47 @@ import cv2
 from PIL import Image, ImageDraw
 from functools import reduce
 import csv 
+import flood
 
-imagename = "me"
+imagename = "mee"
 #画像の読み込み
 image = Image.open(imagename + ".png")
 
+def sobel(imagename):
+    #グレースケール化
+    img = cv2.cvtColor(cv2.imread(imagename + ".png"), cv2.COLOR_BGR2GRAY)
+    img_sobel = cv2.Sobel(img, cv2.CV_32F, 1, 1, ksize=5)
+    cv2.imwrite("sobel.png", img_sobel)
+
+def lap(imagename):
+    #グレースケール化
+    img = cv2.cvtColor(cv2.imread(imagename + ".png"), cv2.COLOR_BGR2GRAY)
+    img_gauss = cv2.GaussianBlur(img, (3, 3), 3)
+    img_lap = cv2.Laplacian(img_gauss, cv2.CV_32F)
+    cv2.imwrite("lap.png", img_lap)
+
+def canny(imagename):
+    #グレースケール化
+    #img = cv2.cvtColor(cv2.imread(imagename + ".png"), cv2.COLOR_BGR2GRAY)
+    img = cv2.imread(imagename + ".png")
+    img_gauss = cv2.GaussianBlur(img, (7, 7), 3)
+    img_canny = cv2.Canny(img_gauss, 100, 200)
+    cv2.imwrite("canny.png", img_canny)
+    return img_canny
+
+def img2bw(imagename):
+    c = 1
+    img_canny = canny(imagename)
+    height, width = img_canny.shape[:2]
+    for i in range(height):
+        for j in range(width):
+            if img_canny[i, j] != 255:
+                flood.flood(i, j, c)
+                color = color + 1
+
 #-------csv書き込み--------
 def csv_w(row, mode):
-    with open('parts.csv', mode) as f:
+    with open('parts.csv', mode, encoding="utf_8_sig") as f:
         writer = csv.writer(f)
         writer.writerow(row)
 
@@ -19,6 +52,7 @@ def find_contours(imagename, mode):
     img = cv2.cvtColor(cv2.imread(imagename + ".png"), cv2.COLOR_BGR2GRAY)
     #色を反転させて2値化
     _, img_2 = cv2.threshold(img, 128, 255, mode)
+    cv2.imwrite("2color.png", img_2)
     #輪郭抽出
     contours, hierarchy = cv2.findContours(img_2, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     #print(len(labels))
@@ -105,13 +139,18 @@ def div_parts(imagename):
         bbox = [box[0]-5, box[1]-5, box[2]+5, box[3]+5]
         output = copy.crop(bbox)
         image_name = imagename + str(i)
-        image_name_numberdraw = image_numberdraw(image_name)
         output.save("parts_image/" + image_name + '.png')
+        image_name_numberdraw = image_numberdraw(image_name)
         csv_w([i, image_name + ".png", image_name_numberdraw, matches[i], hierarchy[i][2], hierarchy[i][3], image.getpixel(area[i]), count_child(i, hierarchy), size_rice[i], size_nori[i]], 'a')
 
-csv_w(["パーツ番号", "パーツ画像", "ID変換画像", "-1だったら独立パーツ", "親パーツ番号", "パーツカラー", "内包パーツ数", "ご飯の量", "海苔のサイズ"], "w")      
-div_parts(imagename)
+#csv_w(["パーツ番号", "パーツ画像", "ID変換画像", "形状番号", "-1だったら独立パーツ", "親パーツ番号", "パーツカラー", "内包パーツ数", "ご飯の量", "海苔のサイズ"], "w")      
+#div_parts(imagename)
 
+#sobel(imagename)
+#lap(imagename)
+canny(imagename)
+
+#mg2bw(imagename)
 
     
 
