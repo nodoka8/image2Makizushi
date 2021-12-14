@@ -143,6 +143,7 @@ def div_parts(imagename):
     data = []
     n = 0
     m = 0
+    change = []
 
     ch = find_contours(imagename, 0)
     contours = ch[0]
@@ -159,20 +160,26 @@ def div_parts(imagename):
         IDcolor_partsimage[0].save("IDcolor_image/" + IDcolor_partsimage[1] + '.png')
         if hierarchy[i][2] == -1:
             number = n
+            change.append(n)
             n = n+1
         else:
             number = m
+            change.append(m)
             m = m+1
+        
+        for k in range(len(contours)):
+            if hierarchy[i][3] == k:
+                hierarchy[i][3] = change[k]
+        
         data.append([number, partsimage[1] + ".png", IDcolor_partsimage[1] + ".png", matches[i], hierarchy[i][2], hierarchy[i][3], None, count_child(i, hierarchy), size_rice[i], size_nori[i], start_parts])
-    
-    for j in data:
-        print(j)
-        if j[4] == -1:
-            csv_w(j, "a")
     
     for h in data:
         if h[4] != -1:
             csv_w(h, "a")
+    
+    for j in data:
+        if j[4] == -1:
+            csv_w(j, "a")
 
 csv_w(["パーツ番号", "パーツ画像", "ID変換画像", "形状番号", "-1だったら独立パーツ", "親パーツ番号", "色", "内包パーツ数", "ご飯の量", "海苔のサイズ", "パーツの最下部"], "w")      
 div_parts(imagename)
