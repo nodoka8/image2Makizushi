@@ -32,6 +32,8 @@ public class SceneManager : MonoBehaviour
 
     public CSVLoader CSVLoader;
 
+
+    [SerializeField]
     private GuideData guideData;
 
 
@@ -46,6 +48,12 @@ public class SceneManager : MonoBehaviour
     //UI
     public Text indidtext;
 
+    public Text noriinfotext;
+
+
+    public Text noritext;
+
+    public Image indinfoimg;
 
 
     // Start is called before the first frame update
@@ -84,6 +92,8 @@ public class SceneManager : MonoBehaviour
                         Debug.Log("処理2");
                         setupSlide[stateindex - 1].SetActive(false);
                         setupSlide[stateindex].SetActive(true);
+
+                       // noriinfotext.text = 
                         break;
 
                     default:
@@ -101,14 +111,17 @@ public class SceneManager : MonoBehaviour
 
                 int i = stateindid + 1;
 
-                indidtext.text = "独立パーツ作成" + i.ToString() + "/4";
+                indidtext.text = "独立パーツ作成" + i.ToString() + " / " + guideData.ind_id.Count;
 
                 switch (stateindex)
                 {
                     case 1:
                         Debug.Log("処理2-1");
                         indSlide[stateindex - 1].SetActive(true);
-                      //  indSlide[stateindex].SetActive(true);
+                        //  indSlide[stateindex].SetActive(true);
+                        indinfoimg.sprite = Sprite.Create((Texture2D)guideData.ind_image[i-1], new Rect(0, 0, guideData.ind_image[i - 1].width, guideData.ind_image[i - 1].height), Vector2.zero);
+
+                        noritext.text = "のり：　縦"+guideData.ind_noriwidth[i-1]+ "cm" + "×横" + guideData.ind_noriheight[i-1]+"cm";
                         break;
 
 
@@ -119,11 +132,10 @@ public class SceneManager : MonoBehaviour
                         break;
                 }
 
-
-                //if(stateindid > guideData.ind_id.Count)
-                if (stateindid > 2)
+                if(stateindid > guideData.ind_id.Count-2)
+                //if (stateindid > 2)
                 {
-                    indSlide[0].SetActive(false);
+                    Debug.Log("aaaaaaaaaaaaaaaaaa");
                     stateindex = 0;
                     oVERALL_STATUS = OVERALL_STATUS.PARENT_PARTS;
                 }
@@ -131,6 +143,8 @@ public class SceneManager : MonoBehaviour
                 break;
 
             case OVERALL_STATUS.PARENT_PARTS:
+                indSlide[0].SetActive(false);
+
                 switch (stateindex)
                 {
                     case 1:
@@ -186,5 +200,31 @@ public class SceneManager : MonoBehaviour
         }
 
 
+    }
+
+    void texserch(Texture2D tex)
+    {
+        Color32[] colors = new Color32[tex.width * tex.height]; ;
+
+        Color color;
+        int width = tex.width;
+        int height = tex.height;
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                color = tex.GetPixel(x,y);
+
+                if(color.r == 0)
+                {
+                    Debug.Log("p1");
+                }
+                else
+                {
+                    Debug.Log("p2");
+                }
+            }
+        }
     }
 }
