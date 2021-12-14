@@ -9,6 +9,7 @@ imagename = "mee"
 #画像の読み込み
 image = Image.open(imagename + ".png")
 
+#cannyによるエッジ検出
 def canny(imagename):
     img = cv2.imread(imagename + ".png")
     img_gauss = cv2.GaussianBlur(img, (5, 5), 3)
@@ -16,6 +17,7 @@ def canny(imagename):
     cv2.imwrite("canny.png", img_canny)
     return img_canny
 
+#エッジ検出した画像をもとにした2値化
 def img2bw(imagename):
     img_canny = canny(imagename)
     width, height = img_canny.shape
@@ -87,6 +89,7 @@ def app_shape(contours):
         matches[i] = shape.index(min(shape))
     return matches
 
+#いらんやつ
 def image_numberdraw(contours):
     number_image = image.copy()
     for i in range(len(contours)):
@@ -97,16 +100,16 @@ def image_numberdraw(contours):
     number_image.save("number_image.png")
     return "number_image"
 
-def calc_size(contours, hierarchy):
+#ご飯と海苔の量計算
+def calc_size(contours):
     rice = [0]*len(contours)
     nori = [0]*len(contours)
     for i in range(len(contours)):
         rice[i] = cv2.contourArea(contours[i])
         nori[i] = cv2.arcLength(contours[i], True)
-        if hierarchy[i][3] != -1:
-            rice[hierarchy[i][3]] = rice[hierarchy[i][3]] - rice[i]
     return [rice, nori]
 
+#内包パーツ数の計算
 def count_child(n, hierarchy):
     count = 0
     for i in range(len(hierarchy)):
@@ -114,6 +117,7 @@ def count_child(n, hierarchy):
             count = count + 1
     return count
 
+#求めた輪郭情報をもとにパーツのトリミング
 def image2parts(imagename, contours, i):
     # 輪郭データをタプルに
     area = tuple(map(lambda c: tuple(c[0]), contours[i]))
@@ -132,6 +136,7 @@ def image2parts(imagename, contours, i):
     image_name = imagename + str(i)
     return [output, image_name]
 
+#各パーツの最下ピクセルのy座標（制作順序のため）
 def start_point(contours):
     y = 0
     for i in contours:
@@ -140,9 +145,13 @@ def start_point(contours):
     return y
 
 def div_parts(imagename):
+    #各パーツ情報のlist
     data = []
+    #独立パーツのパーツ番号
     n = 0
+    #その他のパーツ番号
     m = 0
+    #パーツ番号変更の対応づけ
     change = []
 
     ch = find_contours(imagename, 0)
@@ -150,14 +159,23 @@ def div_parts(imagename):
     hierarchy = ch[1]
     number_imagename = image_numberdraw(contours)
     matches = app_shape(contours)
-    size_rice = calc_size(contours, hierarchy)[0]
-    size_nori = calc_size(contours, hierarchy)[1]
+    size_rice = calc_size(contours)[0]
+    size_nori = calc_size(contours)[1]
+    nori_base_size = size_nori[1]
+    rice_base_size = size_rice[1]
     for i in range(len(contours)):
         start_parts = start_point(contours[i])
         partsimage = image2parts(imagename, contours, i)
         IDcolor_partsimage = image2parts(number_imagename, contours, i)
-        partsimage[0].save("parts_image/" + partsimage[1] + '.png')
+        #入力画像(0)と完成イメージ(1)
+        if i == 0 or i == 1:
+            partsimage[0].save("input_image/" + partsimage[1] + '.png')
+        #その他
+        else:
+            partsimage[0].save("parts_image/" + partsimage[1] + '.png')
+
         IDcolor_partsimage[0].save("IDcolor_image/" + IDcolor_partsimage[1] + '.png')
+
         if hierarchy[i][2] == -1:
             number = n
             change.append(n)
@@ -171,12 +189,14 @@ def div_parts(imagename):
             if hierarchy[i][3] == k:
                 hierarchy[i][3] = change[k]
         
-        data.append([number, partsimage[1] + ".png", IDcolor_partsimage[1] + ".png", matches[i], hierarchy[i][2], hierarchy[i][3], None, count_child(i, hierarchy), size_rice[i], size_nori[i], start_parts])
+        data.append([number, partsimage[1] + ".png", IDcolor_partsimage[1] + ".png", matches[i], hierarchy[i][2], hierarchy[i][3], None, count_child(i, hierarchy), round(30*size_rice[i]/rice_base_size)*10, "1/"+str(round(nori_base_size/size_nori[i])), start_parts])
     
+    #親パーツ並べて
     for h in data:
         if h[4] != -1:
             csv_w(h, "a")
     
+    #その下に独立パーツ
     for j in data:
         if j[4] == -1:
             csv_w(j, "a")
