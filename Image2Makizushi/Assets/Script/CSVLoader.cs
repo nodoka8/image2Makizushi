@@ -88,6 +88,9 @@ public class CSVLoader : MonoBehaviour
                                 guideData.ind_image.Add(tex);
                             //image.sprite = null;
                                 image.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
+
+                                guideData.parent_indid[int.Parse(arr[5])].Add(int.Parse(arr[0]));
+                            guideData.ind_y.Add(int.Parse(arr[13]));
                             //image.overrideSprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero); 
                             //Debug.Log(tex);
                                 //img.texture = tex;
@@ -104,7 +107,12 @@ public class CSVLoader : MonoBehaviour
 
                                 Texture2D tex2 = readByBinary(readPngFile(Application.dataPath + "/IDcolor_image/" + arr[2]));
                                 guideData.parent_idimage.Add(tex2);
-                               // texserch(tex2);
+
+                                List<int> l = new List<int>(); 
+                                guideData.parent_indid.Add(l);
+                                guideData.parent_y.Add(int.Parse(arr[13]));
+
+                            // texserch(tex2);
                         }
 
                     }

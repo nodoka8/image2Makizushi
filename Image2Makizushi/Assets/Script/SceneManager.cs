@@ -27,6 +27,8 @@ public class SceneManager : MonoBehaviour
     public int stateindex;
 
     public int stateindid;
+    public int stateparid;
+
 
     public OVERALL_STATUS oVERALL_STATUS;
 
@@ -41,7 +43,7 @@ public class SceneManager : MonoBehaviour
     public List<GameObject> setupSlide = new List<GameObject>(); //独立パーツ番号
     public List<GameObject> indSlide = new List<GameObject>(); //独立パーツ番号
     public List<GameObject> parentSlide = new List<GameObject>(); //独立パーツ番号
-
+    public GameObject finishslide;
 
 
 
@@ -52,8 +54,18 @@ public class SceneManager : MonoBehaviour
 
 
     public Text noritext;
+    public Text volumetext;
+
+    public Text pidtext;
+    public Text pnoritext;
+    public Text pvolumetext;
+    public Text ppartstext;
 
     public Image indinfoimg;
+
+
+    public Image parentinfoimg;
+
 
 
     // Start is called before the first frame update
@@ -121,7 +133,8 @@ public class SceneManager : MonoBehaviour
                         //  indSlide[stateindex].SetActive(true);
                         indinfoimg.sprite = Sprite.Create((Texture2D)guideData.ind_image[i-1], new Rect(0, 0, guideData.ind_image[i - 1].width, guideData.ind_image[i - 1].height), Vector2.zero);
 
-                        noritext.text = "のり：　縦"+guideData.ind_noriwidth[i-1]+ "cm" + "×横" + guideData.ind_noriheight[i-1]+"cm";
+                        noritext.text = "のり：" + guideData.ind_noriheight[i-1]+"";
+                        volumetext.text = "ごはん："+guideData.ind_noriwidth[i-1]+"g";
                         break;
 
 
@@ -144,13 +157,28 @@ public class SceneManager : MonoBehaviour
 
             case OVERALL_STATUS.PARENT_PARTS:
                 indSlide[0].SetActive(false);
+                int j = guideData.parent_id.Count - stateparid;
+                pidtext.text = "親パーツ作成" + j.ToString() + " / " + guideData.parent_id.Count;
 
                 switch (stateindex)
                 {
                     case 1:
                         Debug.Log("処理3-1");
+                        parentSlide[parentSlide.Count-1].SetActive(false);
                         parentSlide[stateindex - 1].SetActive(true);
+                        pnoritext.text = "のり：" + guideData.parent_noriheight[j - 1] + "";
+                        pvolumetext.text = "ごはん：" + guideData.parent_noriwidth[j - 1] + "g";
 
+                        string t = "使用するパーツ:";
+                        for(int k=0; k < guideData.parent_indid[j - 1].Count; k++)
+                        {
+                            t += guideData.parent_indid[j - 1][k].ToString();
+                            t += ",";
+                            Debug.Log(guideData.parent_indid[j - 1][k]);
+                        }
+                        ppartstext.text = t;
+
+                        parentinfoimg.sprite = Sprite.Create((Texture2D)guideData.parent_image[j - 1], new Rect(0, 0, guideData.parent_image[j - 1].width, guideData.parent_image[j - 1].height), Vector2.zero);
 
                         break;
 
@@ -170,18 +198,29 @@ public class SceneManager : MonoBehaviour
 
                     default:
                         stateindex = 0;
-                        oVERALL_STATUS = OVERALL_STATUS.FINISH;
+                        stateparid += 1;
+                        //oVERALL_STATUS = OVERALL_STATUS.FINISH;
                         Actions();
                         break;
+                }
+
+                if (stateparid > guideData.parent_id.Count - 2)
+                //if (stateindid > 2)
+                {
+                    Debug.Log("aaaaaaaaaaaaaaaaaa");
+                    stateindex = 0;
+                    oVERALL_STATUS = OVERALL_STATUS.FINISH;
                 }
 
                 break;
 
             case OVERALL_STATUS.FINISH:
+                parentSlide[2].SetActive(false);
                 switch (stateindex)
                 {
                     case 1:
-                        Debug.Log("処理2-1");
+                        finishslide.SetActive(true);
+                        Debug.Log("Finish");
                         break;
 
                     case 2:
