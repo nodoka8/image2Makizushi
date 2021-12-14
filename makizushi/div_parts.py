@@ -132,7 +132,18 @@ def image2parts(imagename, contours, i):
     image_name = imagename + str(i)
     return [output, image_name]
 
+def start_point(contours):
+    y = 0
+    for i in contours:
+        if i[0][1] >= y:
+            y = i[0][1]
+    return y
+
 def div_parts(imagename):
+    data = []
+    n = 0
+    m = 0
+
     ch = find_contours(imagename, 0)
     contours = ch[0]
     hierarchy = ch[1]
@@ -141,13 +152,29 @@ def div_parts(imagename):
     size_rice = calc_size(contours, hierarchy)[0]
     size_nori = calc_size(contours, hierarchy)[1]
     for i in range(len(contours)):
+        start_parts = start_point(contours[i])
         partsimage = image2parts(imagename, contours, i)
         IDcolor_partsimage = image2parts(number_imagename, contours, i)
         partsimage[0].save("parts_image/" + partsimage[1] + '.png')
         IDcolor_partsimage[0].save("IDcolor_image/" + IDcolor_partsimage[1] + '.png')
-        csv_w([i, partsimage[1] + ".png", IDcolor_partsimage[1] + ".png", matches[i], hierarchy[i][2], hierarchy[i][3], count_child(i, hierarchy), size_rice[i], size_nori[i]], 'a')
+        if hierarchy[i][2] == -1:
+            number = n
+            n = n+1
+        else:
+            number = m
+            m = m+1
+        data.append([number, partsimage[1] + ".png", IDcolor_partsimage[1] + ".png", matches[i], hierarchy[i][2], hierarchy[i][3], None, count_child(i, hierarchy), size_rice[i], size_nori[i], start_parts])
+    
+    for j in data:
+        print(j)
+        if j[4] == -1:
+            csv_w(j, "a")
+    
+    for h in data:
+        if h[4] != -1:
+            csv_w(h, "a")
 
-csv_w(["パーツ番号", "パーツ画像", "ID変換画像", "形状番号", "-1だったら独立パーツ", "親パーツ番号", "内包パーツ数", "ご飯の量", "海苔のサイズ"], "w")      
+csv_w(["パーツ番号", "パーツ画像", "ID変換画像", "形状番号", "-1だったら独立パーツ", "親パーツ番号", "色", "内包パーツ数", "ご飯の量", "海苔のサイズ", "パーツの最下部"], "w")      
 div_parts(imagename)
 
 #sobel(imagename)
@@ -155,6 +182,3 @@ div_parts(imagename)
 #canny(imagename)
 
 #img2bw(imagename)
-
-    
-
