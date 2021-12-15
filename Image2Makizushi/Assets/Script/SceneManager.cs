@@ -78,6 +78,9 @@ public class SceneManager : MonoBehaviour
     public Image ppimg;
 
     public Image ppimg2;
+    public Image ppimg3;
+    public Text pptext;
+
 
     public Image rollimg;
     int pcount = 0;
@@ -267,7 +270,7 @@ public class SceneManager : MonoBehaviour
                         parentSlide[stateindex - 2].SetActive(false);
                         parentSlide[stateindex-1].SetActive(true);
                         ppimg2.sprite = Sprite.Create((Texture2D)guideData.parent_img2[j - 1][pcount], new Rect(0, 0, guideData.parent_img2[j - 1][pcount].width, guideData.parent_img2[j - 1][pcount].height), Vector2.zero);
-
+                        ppimg3.sprite = Sprite.Create((Texture2D)guideData.ind_image[pcount], new Rect(0, 0, guideData.ind_image[pcount].width, guideData.ind_image[pcount].height), Vector2.zero);
                         break;
 
                     case 3:
