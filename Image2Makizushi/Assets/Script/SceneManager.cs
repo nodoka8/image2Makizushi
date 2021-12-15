@@ -75,6 +75,11 @@ public class SceneManager : MonoBehaviour
     public Image indColor;
     public Image PColor;
 
+    public Image ppimg;
+
+    public Image ppimg2;
+
+    public Image rollimg;
     int pcount = 0;
     // Start is called before the first frame update
     void Start()
@@ -243,6 +248,7 @@ public class SceneManager : MonoBehaviour
                         pnoritext.text = "のり：" + guideData.parent_noriheight[j - 1] + "";
                         pvolumetext.text = "ごはん：" + guideData.parent_noriwidth[j - 1] + "g";
                         PColor.color = guideData.parent_color[j - 1];
+                        ppimg.sprite = Sprite.Create((Texture2D)guideData.parent_img2[j-1][pcount], new Rect(0, 0, guideData.parent_img2[j - 1][pcount].width, guideData.parent_img2[j - 1][pcount].height), Vector2.zero);
                         string t = "使用するパーツ:";
                         for(int k=0; k < guideData.parent_indid[j - 1].Count; k++)
                         {
@@ -260,6 +266,7 @@ public class SceneManager : MonoBehaviour
                         Debug.Log("処理3-2");
                         parentSlide[stateindex - 2].SetActive(false);
                         parentSlide[stateindex-1].SetActive(true);
+                        ppimg2.sprite = Sprite.Create((Texture2D)guideData.parent_img2[j - 1][pcount], new Rect(0, 0, guideData.parent_img2[j - 1][pcount].width, guideData.parent_img2[j - 1][pcount].height), Vector2.zero);
 
                         break;
 
@@ -267,7 +274,7 @@ public class SceneManager : MonoBehaviour
                         Debug.Log("処理3-3");
                         parentSlide[stateindex - 2].SetActive(false);
                         parentSlide[stateindex-1].SetActive(true);
-
+                        rollimg.sprite = Sprite.Create((Texture2D)guideData.parent_image[j - 1], new Rect(0, 0, guideData.parent_image[j - 1].width, guideData.parent_image[j - 1].height), Vector2.zero);
                         break;
 
                     default:
