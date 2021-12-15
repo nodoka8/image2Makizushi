@@ -124,6 +124,31 @@ public class CSVLoader : MonoBehaviour
 
                                 List<int> l = new List<int>(); 
                                 guideData.parent_indid.Add(l);
+                            //14
+
+
+                            List<Texture2D> ll = new List<Texture2D>();
+                                for(int i =0; i < int.Parse(arr[10]); i++)
+                                {
+
+
+                                if (i == 0 || i == int.Parse(arr[10]) - 1)
+                                {
+                                    Texture2D tex3 = readByBinary(readPngFile(Application.dataPath + "/resipi_line_image/" + arr[i + 14].Trim(new char[] { '"',' ' })));
+                                    ll.Add(tex3);
+                                    Debug.Log("yomikomi"+i);
+                                   // ll.Add(arr[i + 14].Trim(new char[] { '"' }));
+                                    //Debug.Log(arr[i + 14].Trim(new char[] { '"' }));
+                                }
+                                else
+                                {
+                                    Texture2D tex3 = readByBinary(readPngFile(Application.dataPath + "/resipi_line_image/" + arr[i + 14].Trim(new char[] { '"', ' ' })));
+                                    ll.Add(tex3);
+                                    Debug.Log("yomikomi" + i);
+
+                                }
+                            }
+                                guideData.parent_img2.Add(ll);
                                 guideData.parent_y.Add(int.Parse(arr[13]));
                                 
                             // texserch(tex2);

@@ -30,6 +30,9 @@ public class GuideData
     public List<List<int>> parent_indid = new List<List<int>>();//内包独立パーツ番号
 
 
+    public List<List<Texture2D>> parent_img2 = new List<List<Texture2D>>();//内包独立パーツ番画像
+
+
     public List<float> parent_noriwidth = new List<float>(); //親パーツご飯量
     public List<string> parent_noriheight = new List<string>(); //親パーツ海苔縦
 
