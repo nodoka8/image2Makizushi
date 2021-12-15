@@ -4,6 +4,7 @@ from PIL import Image, ImageDraw
 from functools import reduce
 import csv 
 import flood
+import numpy as np
 
 imagename = "mee"
 #画像の読み込み
@@ -144,9 +145,16 @@ def resipi_line_image(contours):
         for j in contours[i]:
             if j[0][1] >= y:
                 y = j[0][1]
-        for k in range(line_image.width):
-            line_image.putpixel((k, y), (0, 255, 255))
-        line_image.save("line_image/line_image" + str(i) + ".png")
+        for l in range(3):
+            for k in range(line_image.width):
+                line_image.putpixel((k, y+l-2), (0, 255, 255))
+        line_image.save("line_image_a/line_image" + str(i) + ".png")
+        y_image = cv2.imread("line_image_a/line_image" + str(i) + ".png")
+        _, width, _ = y_image.shape[:3]
+        for k in range(y-2):
+            for j in range(width):
+                y_image[k, j] = y_image[k, j, 0]*0.4+75
+        cv2.imwrite("line_image/line_image" + str(i) + ".png", y_image)
         line_imagename.append("line_image" + str(i))
     return line_imagename
 
@@ -180,7 +188,7 @@ def div_parts(imagename):
     nori_base_size = size_nori[1]
     rice_base_size = size_rice[1]
     for i in range(len(contours)):
-        line_imagename_list = []
+        line_imagename_list = ""
         start_parts = start_point(contours[i])
         partsimage = image2parts(imagename, contours, i)
         IDcolor_partsimage = image2parts(number_imagename, contours, i)
@@ -189,8 +197,8 @@ def div_parts(imagename):
                 resipi_line_partsimage = image2parts("line_image/" + line_imagename[j], contours, i)
                 #ガイドラインイメージ保存
                 resipi_line_partsimage[0].save("resipi_line_image/" + resipi_line_partsimage[1].split("/")[1] + '.png')
-                line_imagename_list.append(resipi_line_partsimage[1].split("/")[1] + '.png')
-
+                line_imagename_list = line_imagename_list + resipi_line_partsimage[1].split("/")[1] + '.png, '
+    
         #入力画像(0)と完成イメージ(1)
         if i == 1 and i == 0:
             partsimage[0].save("input_image/" + partsimage[1] + '.png')
@@ -208,7 +216,8 @@ def div_parts(imagename):
             hierarchy[i][2] = 0
             data[hierarchy[i][3]][4] = -1
 
-        data.append([i, partsimage[1] + ".png", IDcolor_partsimage[1] + ".png", matches[i], hierarchy[i][2], hierarchy[i][3], None, count_child(i, hierarchy), round(30*size_rice[i]/rice_base_size)*10, "'1/"+str(nori_mai)+"'", start_parts, line_imagename_list])
+
+        data.append([i, partsimage[1] + ".png", IDcolor_partsimage[1] + ".png", matches[i], hierarchy[i][2], hierarchy[i][3], None, count_child(i, hierarchy), round(30*size_rice[i]/rice_base_size)*10, "'1/"+str(nori_mai), start_parts, line_imagename_list[:-2]])
     
     for k in range(len(data)):
         #独立パーツ番号編集
@@ -234,9 +243,9 @@ def div_parts(imagename):
                 c = c+1
           
     #親パーツ並べて
-    for h in data:
-        if h[4] != -1 and h[4] != 0 and h[5] != -1:
-            csv_w(h, "a")
+    for j in data:
+        if j[4] != -1 and j[4] != 0 and j[5] != -1:
+            csv_w(j, "a")
     
     #その下に独立パーツ
     for j in data:
