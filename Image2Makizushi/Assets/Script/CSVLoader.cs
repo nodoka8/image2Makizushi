@@ -18,16 +18,24 @@ public class CSVLoader : MonoBehaviour
     public Image image;
     public RawImage img;
 
+    public Image inputimg;
+    public Image outputimg;
+
     // Use this for initialization
     void Start()
 	{
 		guideData = new GuideData();
         path = Application.dataPath + "/parts.csv";
+        LoadCSV2();
+
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.G)) LoadCSV2();
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            LoadCSV2();
+        }
     }
     void LoadCSV()
 	{
@@ -74,15 +82,18 @@ public class CSVLoader : MonoBehaviour
                             {
                                 Debug.Log(arr[i]);
                             }
-                            if (int.Parse(arr[10]) == 0) {
+                            if (int.Parse(arr[4]) == -1) {
                             Debug.Log("texture");
 
                                 guideData.ind_id.Add(int.Parse(arr[0]));
                                 guideData.ind_shapeid.Add(int.Parse(arr[3]));
-                                /*Color color = new Color(int.Parse(arr[6]), int.Parse(arr[7]), int.Parse(arr[8]), int.Parse(arr[9]));
-                                guideData.ind_color.Add(color);*/
+
+                           // arr[6].Replace("","");
+                              // Debug.Log(arr[6].Trim(new char[] { '"' }));
+                                Color color = new Color(float.Parse(arr[6].Trim(new char[] { '"' })), float.Parse(arr[7]), float.Parse(arr[8]), float.Parse(arr[9].Trim(new char[] { '"' })));
+                                guideData.ind_color.Add(color);
                                 guideData.ind_noriwidth.Add(float.Parse(arr[11]));
-                                guideData.ind_noriheight.Add(float.Parse(arr[12]));
+                                guideData.ind_noriheight.Add(arr[12]);
 
                                 Texture2D tex = readByBinary(readPngFile(Application.dataPath + "/parts_image/" + arr[1]));
                                 guideData.ind_image.Add(tex);
@@ -90,19 +101,22 @@ public class CSVLoader : MonoBehaviour
                                 image.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
 
                                 guideData.parent_indid[int.Parse(arr[5])].Add(int.Parse(arr[0]));
-                            guideData.ind_y.Add(int.Parse(arr[13]));
+                                guideData.ind_y.Add(int.Parse(arr[13]));
                             //image.overrideSprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero); 
                             //Debug.Log(tex);
                                 //img.texture = tex;
                             }
-                            else
-                            {
+                            else if (int.Parse(arr[4]) != 0)
+                             {
                                 guideData.parent_id.Add(int.Parse(arr[0]));
-                                guideData.parent_num.Add(int.Parse(arr[7]));
+                                guideData.parent_num.Add(int.Parse(arr[10]));
                                 guideData.parent_noriwidth.Add(float.Parse(arr[11]));
-                                guideData.parent_noriheight.Add(float.Parse(arr[12]));
+                                guideData.parent_noriheight.Add(arr[12]);
 
-                                Texture2D tex = readByBinary(readPngFile(Application.dataPath + "/parts_image/" + arr[1]));
+
+                                Color color = new Color(float.Parse(arr[6].Trim(new char[] { '"' })), float.Parse(arr[7]), float.Parse(arr[8]), float.Parse(arr[9].Trim(new char[] { '"' })));
+                                guideData.parent_color.Add(color);
+                            Texture2D tex = readByBinary(readPngFile(Application.dataPath + "/parts_image/" + arr[1]));
                                 guideData.parent_image.Add(tex);
 
                                 Texture2D tex2 = readByBinary(readPngFile(Application.dataPath + "/IDcolor_image/" + arr[2]));
@@ -111,9 +125,9 @@ public class CSVLoader : MonoBehaviour
                                 List<int> l = new List<int>(); 
                                 guideData.parent_indid.Add(l);
                                 guideData.parent_y.Add(int.Parse(arr[13]));
-
+                                
                             // texserch(tex2);
-                        }
+                             }
 
                     }
                     else
@@ -134,6 +148,14 @@ public class CSVLoader : MonoBehaviour
                 //guideData.parent_num.Add(int.Parse(arr[2]));
 
             }
+
+            Texture2D inputtex = readByBinary(readPngFile(Application.dataPath + "/input_image/mee0.png"));
+            inputimg.sprite = Sprite.Create((Texture2D)inputtex, new Rect(0, 0, inputtex.width, inputtex.height), Vector2.zero);
+
+            Texture2D outputtex = readByBinary(readPngFile(Application.dataPath + "/input_image/mee1.png"));
+            outputimg.sprite = Sprite.Create((Texture2D)outputtex, new Rect(0, 0, outputtex.width, outputtex.height), Vector2.zero);
+
+
         }
         catch (Exception e)
         {
