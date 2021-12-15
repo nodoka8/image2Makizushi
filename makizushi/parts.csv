@@ -1,8 +1,7 @@
-﻿パーツ番号,パーツ画像,ID変換画像,形状番号,-1だったら独立パーツ,親パーツ番号,色,内包パーツ数,ご飯の量,海苔のサイズ,パーツの最下部
-0,mee0.png,number_image0.png,0,1,-1,,1,660,1/1,809
-1,mee1.png,number_image1.png,0,2,0,,3,300,1/1,732
-2,mee3.png,number_image3.png,1,4,1,,1,20,1/4,385
-3,mee5.png,number_image5.png,1,6,1,,1,20,1/4,390
-0,mee2.png,number_image2.png,2,-1,1,,0,30,1/3,643
-1,mee4.png,number_image4.png,0,-1,2,,0,0,1/30,300
-2,mee6.png,number_image6.png,0,-1,3,,0,0,1/29,312
+﻿パーツ番号,パーツ画像,ID変換画像,形状番号,独立(-1)後付け(0),親パーツ番号,色,内包パーツ数,ご飯の量,海苔のサイズ,パーツの最下部,ガイドライン付き画像
+0,mee1.png,number_image1.png,0,2,0,,3,300,'1/1',732,"['line_image21.png', 'line_image31.png', 'line_image51.png']"
+0,mee2.png,number_image2.png,2,-1,0,,0,30,'1/3',643,[]
+1,mee3.png,number_image3.png,1,-1,0,,1,20,'1/4',385,['line_image43.png']
+2,mee5.png,number_image5.png,1,-1,0,,1,20,'1/4',390,['line_image65.png']
+0,mee4.png,number_image4.png,0,0,1,,0,0,'1/30',300,[]
+1,mee6.png,number_image6.png,0,0,2,,0,0,'1/29',312,[]

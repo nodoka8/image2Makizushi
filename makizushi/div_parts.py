@@ -136,6 +136,21 @@ def image2parts(imagename, contours, i):
     image_name = imagename + str(i)
     return [output, image_name]
 
+def resipi_line_image(contours):
+    line_imagename = []
+    for i in range(len(contours)):
+        line_image = Image.open(imagename + ".png")
+        y = 0
+        for j in contours[i]:
+            if j[0][1] >= y:
+                y = j[0][1]
+        for k in range(line_image.width):
+            line_image.putpixel((k, y), (0, 255, 255))
+        line_image.save("line_image/line_image" + str(i) + ".png")
+        line_imagename.append("line_image" + str(i))
+    return line_imagename
+
+
 #各パーツの最下ピクセルのy座標（制作順序のため）
 def start_point(contours):
     y = 0
@@ -148,60 +163,92 @@ def div_parts(imagename):
     #各パーツ情報のlist
     data = []
     #独立パーツのパーツ番号
-    n = 0
+    a = 0
+    #後付けパーツのパーツ番号
+    b = 0
     #その他のパーツ番号
-    m = 0
-    #パーツ番号変更の対応づけ
-    change = []
+    c = 0
 
     ch = find_contours(imagename, 0)
     contours = ch[0]
     hierarchy = ch[1]
     number_imagename = image_numberdraw(contours)
+    line_imagename = resipi_line_image(contours)
     matches = app_shape(contours)
     size_rice = calc_size(contours)[0]
     size_nori = calc_size(contours)[1]
     nori_base_size = size_nori[1]
     rice_base_size = size_rice[1]
     for i in range(len(contours)):
+        line_imagename_list = []
         start_parts = start_point(contours[i])
         partsimage = image2parts(imagename, contours, i)
         IDcolor_partsimage = image2parts(number_imagename, contours, i)
+        for j in range(len(contours)):
+            if hierarchy[j][3] == i:
+                resipi_line_partsimage = image2parts("line_image/" + line_imagename[j], contours, i)
+                #ガイドラインイメージ保存
+                resipi_line_partsimage[0].save("resipi_line_image/" + resipi_line_partsimage[1].split("/")[1] + '.png')
+                line_imagename_list.append(resipi_line_partsimage[1].split("/")[1] + '.png')
+
         #入力画像(0)と完成イメージ(1)
-        if i == 0 or i == 1:
+        if i == 1 and i == 0:
             partsimage[0].save("input_image/" + partsimage[1] + '.png')
         #その他
         else:
             partsimage[0].save("parts_image/" + partsimage[1] + '.png')
 
+        #IDカラーイメージ保存
         IDcolor_partsimage[0].save("IDcolor_image/" + IDcolor_partsimage[1] + '.png')
 
-        if hierarchy[i][2] == -1:
-            number = n
-            change.append(n)
-            n = n+1
-        else:
-            number = m
-            change.append(m)
-            m = m+1
-        
-        for k in range(len(contours)):
-            if hierarchy[i][3] == k:
-                hierarchy[i][3] = change[k]
-        
-        data.append([number, partsimage[1] + ".png", IDcolor_partsimage[1] + ".png", matches[i], hierarchy[i][2], hierarchy[i][3], None, count_child(i, hierarchy), round(30*size_rice[i]/rice_base_size)*10, "1/"+str(round(nori_base_size/size_nori[i])), start_parts])
+        #ノリ枚数分母
+        nori_mai = round(nori_base_size/size_nori[i])
+        #ノリ枚数の分母>4の場合は後付けパーツ(0)
+        if nori_mai > 4:
+            hierarchy[i][2] = 0
+            data[hierarchy[i][3]][4] = -1
+
+        data.append([i, partsimage[1] + ".png", IDcolor_partsimage[1] + ".png", matches[i], hierarchy[i][2], hierarchy[i][3], None, count_child(i, hierarchy), round(30*size_rice[i]/rice_base_size)*10, "'1/"+str(nori_mai)+"'", start_parts, line_imagename_list])
     
+    for k in range(len(data)):
+        #独立パーツ番号編集
+        if data[k][4] == -1:
+            data[k][0] = a
+            #パーツ番号編集にともなった核発の親パーツ番号編集
+            for i in range(len(data)):
+                if data[i][5] == k:
+                    data[i][5] = a
+            a = a+1
+        #後付けパーツ番号編集
+        elif data[k][4] == 0:
+            data[k][0] = b
+            b = b+1
+        #その他のパーツ番号編集
+        else:
+            if data[k][0] != 0:
+                data[k][0] = c
+                #パーツ番号編集にともなった核発の親パーツ番号編集
+                for i in range(len(data)):
+                    if data[i][5] == k:
+                        data[i][5] = c
+                c = c+1
+          
     #親パーツ並べて
     for h in data:
-        if h[4] != -1:
+        if h[4] != -1 and h[4] != 0 and h[5] != -1:
             csv_w(h, "a")
     
     #その下に独立パーツ
     for j in data:
         if j[4] == -1:
             csv_w(j, "a")
+    
+    #その下に後付けパーツ
+    for j in data:
+        if j[4] == 0:
+            csv_w(j, "a")
 
-csv_w(["パーツ番号", "パーツ画像", "ID変換画像", "形状番号", "-1だったら独立パーツ", "親パーツ番号", "色", "内包パーツ数", "ご飯の量", "海苔のサイズ", "パーツの最下部"], "w")      
+csv_w(["パーツ番号", "パーツ画像", "ID変換画像", "形状番号", "独立(-1)後付け(0)", "親パーツ番号", "色", "内包パーツ数", "ご飯の量", "海苔のサイズ", "パーツの最下部", "ガイドライン付き画像"], "w")      
 div_parts(imagename)
 
 #sobel(imagename)
