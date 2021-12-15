@@ -48,9 +48,13 @@ public class SceneManager : MonoBehaviour
 
 
     //UI
+
+
     public Text indidtext;
 
     public Text noriinfotext;
+    public Text volumeinfotext;
+
 
 
     public Text noritext;
@@ -66,8 +70,12 @@ public class SceneManager : MonoBehaviour
 
     public Image parentinfoimg;
 
+    public List<Image> colorlist = new List<Image>(); //独立パーツ番号
 
+    public Image indColor;
+    public Image PColor;
 
+    int pcount = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -105,7 +113,58 @@ public class SceneManager : MonoBehaviour
                         setupSlide[stateindex - 1].SetActive(false);
                         setupSlide[stateindex].SetActive(true);
 
-                       // noriinfotext.text = 
+                        // noriinfotext.text = 
+                        string t = "必要なのり:";
+                        for (int k = 0; k < guideData.parent_noriwidth.Count; k++)
+                        {
+                            t += guideData.parent_noriheight[k].ToString();
+
+
+                            t += "\n";
+
+                            //Debug.Log(guideData.parent_indid[j - 1][k]);
+                        }
+
+
+                        for (int k = 0; k < guideData.ind_noriwidth.Count; k++)
+                        {
+                            t += guideData.ind_noriheight[k].ToString();
+                            t += "\n";
+
+
+                            //Debug.Log(guideData.parent_indid[j - 1][k]);
+                        }
+
+                        noriinfotext.text = t;
+
+
+                        int n = 0;
+
+
+                        t = "必要なごはん:";
+                        for (int k = 0; k < guideData.parent_noriheight.Count; k++)
+                        {
+                            t += guideData.parent_noriwidth[k].ToString();
+
+                            t += "g\n";
+
+
+                            colorlist[n].color = guideData.parent_color[k];
+                            n++;
+                        }
+
+                        for (int k = 0; k < guideData.ind_noriheight.Count; k++)
+                        {
+                            t += guideData.ind_noriwidth[k].ToString();
+
+                            t += "g\n";
+
+
+                            colorlist[n].color = guideData.ind_color[k];
+                            n++;
+                        }
+
+                        volumeinfotext.text = t;
                         break;
 
                     default:
@@ -135,6 +194,7 @@ public class SceneManager : MonoBehaviour
 
                         noritext.text = "のり：" + guideData.ind_noriheight[i-1]+"";
                         volumetext.text = "ごはん："+guideData.ind_noriwidth[i-1]+"g";
+                        indColor.color = guideData.ind_color[i - 1];
                         break;
 
 
@@ -159,16 +219,30 @@ public class SceneManager : MonoBehaviour
                 indSlide[0].SetActive(false);
                 int j = guideData.parent_id.Count - stateparid;
                 pidtext.text = "親パーツ作成" + j.ToString() + " / " + guideData.parent_id.Count;
-
+                if (stateindex == 3)
+                {
+                    if (pcount < guideData.parent_num[j - 1]-1)
+                    {
+                        stateindex = 1;
+                        Debug.Log("内包パーツ取付" + pcount.ToString());
+                        pcount++;
+                    }
+                    else
+                    {
+                        pcount = 0;
+                    }
+                }
                 switch (stateindex)
                 {
                     case 1:
                         Debug.Log("処理3-1");
                         parentSlide[parentSlide.Count-1].SetActive(false);
                         parentSlide[stateindex - 1].SetActive(true);
+                        parentSlide[stateindex].SetActive(false);
+
                         pnoritext.text = "のり：" + guideData.parent_noriheight[j - 1] + "";
                         pvolumetext.text = "ごはん：" + guideData.parent_noriwidth[j - 1] + "g";
-
+                        PColor.color = guideData.parent_color[j - 1];
                         string t = "使用するパーツ:";
                         for(int k=0; k < guideData.parent_indid[j - 1].Count; k++)
                         {
@@ -176,7 +250,7 @@ public class SceneManager : MonoBehaviour
                             t += ",";
                             Debug.Log(guideData.parent_indid[j - 1][k]);
                         }
-                        ppartstext.text = t;
+                       // ppartstext.text = t;
 
                         parentinfoimg.sprite = Sprite.Create((Texture2D)guideData.parent_image[j - 1], new Rect(0, 0, guideData.parent_image[j - 1].width, guideData.parent_image[j - 1].height), Vector2.zero);
 
@@ -200,14 +274,22 @@ public class SceneManager : MonoBehaviour
                         stateindex = 0;
                         stateparid += 1;
                         //oVERALL_STATUS = OVERALL_STATUS.FINISH;
+                        if (stateparid > guideData.parent_id.Count - 1)
+                        //if (stateindid > 2)
+                        {
+                            Debug.Log("bbbbbbbbbb");
+                            stateindex = 0;
+                            oVERALL_STATUS = OVERALL_STATUS.FINISH;
+                        }
+
                         Actions();
                         break;
                 }
 
-                if (stateparid > guideData.parent_id.Count - 2)
+                if (stateparid > guideData.parent_id.Count-1)
                 //if (stateindid > 2)
                 {
-                    Debug.Log("aaaaaaaaaaaaaaaaaa");
+                    Debug.Log("bbbbbbbbbb");
                     stateindex = 0;
                     oVERALL_STATUS = OVERALL_STATUS.FINISH;
                 }
