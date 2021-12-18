@@ -13,7 +13,7 @@ image = Image.open(imagename + ".png")
 #cannyによるエッジ検出
 def canny(imagename):
     img = cv2.imread(imagename + ".png")
-    img_gauss = cv2.GaussianBlur(img, (5, 5), 3)
+    img_gauss = cv2.GaussianBlur(img, (3, 3), 3)
     img_canny = cv2.Canny(img_gauss, 100, 200)
     cv2.imwrite("canny.png", img_canny)
     return img_canny
@@ -54,23 +54,28 @@ def find_contours(imagename, mode):
         _, img_2 = cv2.threshold(img, 0, 255, cv2.THRESH_OTSU)
     #輪郭抽出
     contours, hierarchy = cv2.findContours(img_2, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    #print(len(labels))
     contours_list = list(contours)
     hierarchy_list = list(hierarchy[0])
-    #labels_list = list(labels[0])
-    """
-    for i in reversed(range(len(contours_list))):
+    pop_index = []
+    for i in range(len(contours_list)):
         if cv2.contourArea(contours_list[i]) < 30:
-            if hierarchy_list[i][1] != -1:
-                hierarchy_list[hierarchy_list[i][1]][0] = hierarchy_list[i][0]
-            if hierarchy_list[i][0] != -1:
-                hierarchy_list[hierarchy_list[i][0]][1] = hierarchy_list[i][1]
             if hierarchy_list[i][3] != -1 and hierarchy_list[hierarchy_list[i][3]][2] == i:
                 hierarchy_list[hierarchy_list[i][3]][2] = hierarchy_list[i][0]
+            pop_index.append(i)
+    pop_index.append(len(contours_list))
+
+    delete_number = 1
+    for i in range(len(pop_index)-1):
+        for j in range(len(contours_list)):
+            if hierarchy_list[j][2] > pop_index[i] and hierarchy_list[j][2] < pop_index[i+1]:
+                hierarchy_list[j][2] = hierarchy_list[j][2]-delete_number
+            if hierarchy_list[j][3] > pop_index[i] and hierarchy_list[j][3] < pop_index[i+1]:
+                hierarchy_list[j][3] = hierarchy_list[j][3]-delete_number
+        delete_number = delete_number+1
+    for i in reversed(range(len(contours_list))):
+        if i in pop_index:
             contours_list.pop(i)
             hierarchy_list.pop(i)
-            #labels_list.pop(i)
-    """
     return [contours_list, hierarchy_list]
 
 #図形近似
@@ -141,16 +146,16 @@ def resipi_line_image(contours):
     line_imagename = []
     for i in range(len(contours)):
         line_image = Image.open(imagename + ".png")
-        y = 0
-        for j in contours[i]:
-            if j[0][1] >= y:
-                y = j[0][1]
+        #各パーツの最下ピクセルのy座標（制作順序のため）
+        y = start_point(contours[i])
+        #最下ピクセルを通るx軸に並行な直線(長さ3)
         for l in range(3):
             for k in range(line_image.width):
                 line_image.putpixel((k, y+l-2), (0, 255, 255))
         line_image.save("line_image_a/line_image" + str(i) + ".png")
         y_image = cv2.imread("line_image_a/line_image" + str(i) + ".png")
         _, width, _ = y_image.shape[:3]
+        #一番上(y=0)から最下点までのピクセルを灰色に
         for k in range(y-2):
             for j in range(width):
                 y_image[k, j] = y_image[k, j, 0]*0.4+75
@@ -161,11 +166,11 @@ def resipi_line_image(contours):
 
 #各パーツの最下ピクセルのy座標（制作順序のため）
 def start_point(contours):
-    y = 0
+    y_min = 0
     for i in contours:
-        if i[0][1] >= y:
-            y = i[0][1]
-    return y
+        if i[0][1] >= y_min:
+            y_min = i[0][1]
+    return y_min
 
 def div_parts(imagename):
     #各パーツ情報のlist
@@ -180,6 +185,13 @@ def div_parts(imagename):
     ch = find_contours(imagename, 0)
     contours = ch[0]
     hierarchy = ch[1]
+    with open('hierarchy.csv', "w", encoding="utf_8_sig") as f:
+        writer = csv.writer(f)
+        writer.writerow([hierarchy[0][2], hierarchy[0][3]])
+    for i in range(len(contours)-1):
+        with open('hierarchy.csv', "a", encoding="utf_8_sig") as f:
+            writer = csv.writer(f)
+            writer.writerow([hierarchy[i+1][2], hierarchy[i+1][3]])
     number_imagename = image_numberdraw(contours)
     line_imagename = resipi_line_image(contours)
     matches = app_shape(contours)
@@ -223,7 +235,7 @@ def div_parts(imagename):
         #独立パーツ番号編集
         if data[k][4] == -1:
             data[k][0] = a
-            #パーツ番号編集にともなった核発の親パーツ番号編集
+            #パーツ番号編集にともなった親パーツ番号編集
             for i in range(len(data)):
                 if data[i][5] == k:
                     data[i][5] = a
@@ -236,7 +248,7 @@ def div_parts(imagename):
         else:
             if data[k][0] != 0:
                 data[k][0] = c
-                #パーツ番号編集にともなった核発の親パーツ番号編集
+                #パーツ番号編集にともなった親パーツ番号編集
                 for i in range(len(data)):
                     if data[i][5] == k:
                         data[i][5] = c
