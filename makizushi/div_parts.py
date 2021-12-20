@@ -208,7 +208,7 @@ def div_parts(imagename):
         r = int(mode[0][0:2], 16)
         g = int(mode[0][2:4], 16)
         b = int(mode[0][4:6], 16)
-        color_mode = str(r)+","+str(g)+","+str(b)
+        color_mode = str(float(r/255))+","+str(float(g/255))+","+str(float(b/255))+",1.0"
 
         #入力画像(0)と完成イメージ(1)
         if i == 1 and i == 0:
