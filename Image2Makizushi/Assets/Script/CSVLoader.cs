@@ -119,8 +119,8 @@ public class CSVLoader : MonoBehaviour
                             Texture2D tex = readByBinary(readPngFile(Application.dataPath + "/parts_image/" + arr[1]));
                                 guideData.parent_image.Add(tex);
 
-                                Texture2D tex2 = readByBinary(readPngFile(Application.dataPath + "/IDcolor_image/" + arr[2]));
-                                guideData.parent_idimage.Add(tex2);
+                              //  Texture2D tex2 = readByBinary(readPngFile(Application.dataPath + "/IDcolor_image/" + arr[2]));
+                              //  guideData.parent_idimage.Add(tex2);
 
                                 List<int> l = new List<int>(); 
                                 guideData.parent_indid.Add(l);
