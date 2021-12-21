@@ -219,14 +219,14 @@ def div_parts(imagename):
             partsimage[0].save("parts_image/" + partsimage[1] + '.png')
 
         #ノリ枚数分母
-        nori_mai = int(nori_base_size/size_nori[i])
+        nori_mai = 2*int(nori_base_size/size_nori[i])
         #ノリ枚数の分母>4の場合は後付けパーツ(0)
         if nori_mai > 4:
             hierarchy[i][2] = 0
             data[hierarchy[i][3]][4] = -1
 
         
-        data.append([i, partsimage[1] + ".png", None, matches[i], hierarchy[i][2], hierarchy[i][3], color_mode, count_child(i, hierarchy), round(30*size_rice[i]/rice_base_size)*10, "'1/"+str(nori_mai), None, line_imagename_list[:-2]])
+        data.append([i, partsimage[1] + ".png", "うんこ", matches[i], hierarchy[i][2], hierarchy[i][3], color_mode, count_child(i, hierarchy), round(260*size_rice[i]/rice_base_size), "'1/"+str(nori_mai), "うんこ", line_imagename_list[:-2]])
 
     for k in range(len(data)):
         #独立パーツ番号編集
