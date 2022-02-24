@@ -94,8 +94,8 @@ def app_shape(contours):
     square_contours = find_contours("base_shape/square", 1)[0]
     half_circle_contours = find_contours("base_shape/half_circle", 1)[0]
     line_contours = find_contours("base_shape/line", 1)[0]
-    drop_contours = find_contours("base_shape/drop", 1)[0],
-    magatama_contours = find_contours("base_shape/magatama", 1)[0],
+    drop_contours = find_contours("base_shape/drop", 1)[0]
+    magatama_contours = find_contours("base_shape/magatama", 1)[0]
     triangle_contours = find_contours("base_shape/triangle", 1)[0]
     for i in range(len(matches)):
         shape[0] = cv2.matchShapes(contours[i], circle_contours[0], cv2.CONTOURS_MATCH_I1, 0)
