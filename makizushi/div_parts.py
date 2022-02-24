@@ -89,16 +89,22 @@ def find_contours(imagename, mode):
 def app_shape(contours):
     num_cnts = len(contours)
     matches = [0] * num_cnts
-    shape = [0,0,0,0]
+    shape = [0,0,0,0,0,0,0]
     circle_contours = find_contours("base_shape/circle", 1)[0]
     square_contours = find_contours("base_shape/square", 1)[0]
     half_circle_contours = find_contours("base_shape/half_circle", 1)[0]
     line_contours = find_contours("base_shape/line", 1)[0]
+    drop_contours = find_contours("base_shape/drop", 1)[0],
+    magatama_contours = find_contours("base_shape/magatama", 1)[0],
+    triangle_contours = find_contours("base_shape/triangle", 1)[0]
     for i in range(len(matches)):
         shape[0] = cv2.matchShapes(contours[i], circle_contours[0], cv2.CONTOURS_MATCH_I1, 0)
         shape[1] = cv2.matchShapes(contours[i], square_contours[0], cv2.CONTOURS_MATCH_I1, 0)
         shape[2] = cv2.matchShapes(contours[i], half_circle_contours[0], cv2.CONTOURS_MATCH_I1, 0)
         shape[3] = cv2.matchShapes(contours[i], line_contours[0], cv2.CONTOURS_MATCH_I1, 0)
+        shape[4] = cv2.matchShapes(contours[i], drop_contours[0], cv2.CONTOURS_MATCH_I1, 0)
+        shape[5] = cv2.matchShapes(contours[i], magatama_contours[0], cv2.CONTOURS_MATCH_I1, 0)
+        shape[6] = cv2.matchShapes(contours[i], triangle_contours[0], cv2.CONTOURS_MATCH_I1, 0)
         matches[i] = shape.index(min(shape))
     return matches
 
