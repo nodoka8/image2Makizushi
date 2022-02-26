@@ -26,11 +26,18 @@ public class GuideData
     public List<Texture2D> parent_idimage = new List<Texture2D>(); //パーツID変換画像
     public List<Color> parent_color = new List<Color>(); //独立パーツカラー
 
+    public List<Color> comp_color = new List<Color>(); //カラー
+    public List<float> comp_rice = new List<float>(); //独立パーツご飯量
+
+
     public List<int> parent_num = new List<int>(); //内包パーツ数
     public List<List<int>> parent_indid = new List<List<int>>();//内包独立パーツ番号
 
 
     public List<List<Texture2D>> parent_img2 = new List<List<Texture2D>>();//内包独立パーツ番画像
+
+
+    public List<Texture2D> nori_image = new List<Texture2D>(); //親パーツ画像
 
 
     public List<float> parent_noriwidth = new List<float>(); //親パーツご飯量

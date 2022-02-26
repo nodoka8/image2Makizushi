@@ -30,6 +30,7 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.GraphicRaycaster
     - UnityEngine.UI.Image
+    - UnityEngine.UI.RawImage
     - UnityEngine.UI.Text
   sceneClasses:
     Assets/Scenes/SampleScene.unity:
@@ -52,33 +53,35 @@ ScriptsOnlyBuild:
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 11356}
+      Script: {instanceID: 11380}
     - Class: 114
-      Script: {instanceID: 11388}
+      Script: {instanceID: 11414}
     - Class: 114
-      Script: {instanceID: 11726}
+      Script: {instanceID: 11760}
     - Class: 114
-      Script: {instanceID: 11778}
+      Script: {instanceID: 11812}
     - Class: 114
-      Script: {instanceID: 12560}
+      Script: {instanceID: 12596}
     - Class: 114
-      Script: {instanceID: 12632}
+      Script: {instanceID: 12668}
     - Class: 114
-      Script: {instanceID: 12744}
+      Script: {instanceID: 12782}
     - Class: 114
-      Script: {instanceID: 13442}
+      Script: {instanceID: 13486}
     - Class: 114
-      Script: {instanceID: 13884}
+      Script: {instanceID: 13534}
     - Class: 114
-      Script: {instanceID: 13908}
+      Script: {instanceID: 13936}
     - Class: 114
-      Script: {instanceID: 14402}
+      Script: {instanceID: 13960}
     - Class: 114
-      Script: {instanceID: 14746}
+      Script: {instanceID: 14454}
     - Class: 114
-      Script: {instanceID: 14956}
+      Script: {instanceID: 14798}
     - Class: 114
-      Script: {instanceID: 15160}
+      Script: {instanceID: 15008}
+    - Class: 114
+      Script: {instanceID: 15214}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -86,6 +89,8 @@ ScriptsOnlyBuild:
     - Class: 157
       Script: {instanceID: 0}
     - Class: 196
+      Script: {instanceID: 0}
+    - Class: 212
       Script: {instanceID: 0}
     - Class: 213
       Script: {instanceID: 0}
@@ -188,7 +193,7 @@ ScriptsOnlyBuild:
     className: TouchInputModule
   - hash:
       serializedVersion: 2
-      Hash: ed90dd6d5301e9841ef215e9e398197e
+      Hash: 08ae9a097a71f7ee550e33250c9bb396
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: CSVLoader
@@ -380,10 +385,16 @@ ScriptsOnlyBuild:
     className: Benchmark01
   - hash:
       serializedVersion: 2
-      Hash: 1bab3ccd2388c1d879c1a382b0bb0bb9
+      Hash: b2935571a8efffed26d582b37a735b3e
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: SceneManager
+  - hash:
+      serializedVersion: 2
+      Hash: 21f3dbbef4861c2b61c25197e3ff0eb2
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: KinectScript
   - hash:
       serializedVersion: 2
       Hash: d4020bafcd3ccbb5601a6e6c8ac78be0
@@ -710,12 +721,6 @@ ScriptsOnlyBuild:
     className: VertexShakeA
   - hash:
       serializedVersion: 2
-      Hash: f064b59b94f0346f75bb2f88775d5b9a
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: GuideData
-  - hash:
-      serializedVersion: 2
       Hash: 8b1fe5dfdcf943fb3b72506b9f19335f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
@@ -807,4 +812,4 @@ ScriptsOnlyBuild:
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: "C:/Users/cerez/OneDrive/\u30C9\u30AD\u30E5\u30E1\u30F3\u30C8/Github/image2Makizushi/makizushi/Image2Makizushi.exe"
+  playerPath: "C:/Users/cerez/OneDrive/\u30C9\u30AD\u30E5\u30E1\u30F3\u30C8/test/Image2Makizushi.exe"
