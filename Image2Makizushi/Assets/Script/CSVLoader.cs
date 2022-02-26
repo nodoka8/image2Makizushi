@@ -91,7 +91,20 @@ public class CSVLoader : MonoBehaviour
                            // arr[6].Replace("","");
                               // Debug.Log(arr[6].Trim(new char[] { '"' }));
                                 Color color = new Color(float.Parse(arr[6].Trim(new char[] { '"' })), float.Parse(arr[7]), float.Parse(arr[8]), float.Parse(arr[9].Trim(new char[] { '"' })));
-                                guideData.ind_color.Add(color);
+
+                            if (guideData.comp_color.Contains(color))
+                            {
+                                guideData.comp_rice[guideData.comp_color.IndexOf(color)] += float.Parse(arr[11]);
+                            }
+                            else
+                            {
+                                guideData.comp_color.Add(color);
+                                guideData.comp_rice.Add(float.Parse(arr[11]));
+
+                            }
+
+                            guideData.ind_color.Add(color);
+
                                 guideData.ind_noriwidth.Add(float.Parse(arr[11]));
                                 guideData.ind_noriheight.Add(arr[12]);
 
@@ -115,8 +128,20 @@ public class CSVLoader : MonoBehaviour
 
 
                                 Color color = new Color(float.Parse(arr[6].Trim(new char[] { '"' })), float.Parse(arr[7]), float.Parse(arr[8]), float.Parse(arr[9].Trim(new char[] { '"' })));
+
+                                if (guideData.comp_color.Contains(color))
+                                {
+                                    guideData.comp_rice[guideData.comp_color.IndexOf(color)] += float.Parse(arr[11]);
+                                }
+                                else
+                                {
+                                    guideData.comp_color.Add(color);
+                                    guideData.comp_rice.Add(float.Parse(arr[11]));
+
+                                }
+
                                 guideData.parent_color.Add(color);
-                            Texture2D tex = readByBinary(readPngFile(Application.dataPath + "/parts_image/" + arr[1]));
+                                Texture2D tex = readByBinary(readPngFile(Application.dataPath + "/parts_image/" + arr[1]));
                                 guideData.parent_image.Add(tex);
 
                               //  Texture2D tex2 = readByBinary(readPngFile(Application.dataPath + "/IDcolor_image/" + arr[2]));
@@ -150,9 +175,14 @@ public class CSVLoader : MonoBehaviour
                             }
                                 guideData.parent_img2.Add(ll);
                                 guideData.parent_y.Add(int.Parse(arr[13]));
-                                
+
                             // texserch(tex2);
-                             }
+                        }
+                        else
+                        {
+                            Texture2D tex = readByBinary(readPngFile(Application.dataPath + "/parts_image/" + arr[1]));
+                            guideData.nori_image.Add(tex);
+                        }
 
                     }
                     else

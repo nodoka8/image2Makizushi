@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 
 public class SceneManager : MonoBehaviour
@@ -43,6 +44,10 @@ public class SceneManager : MonoBehaviour
     public List<GameObject> setupSlide = new List<GameObject>(); //独立パーツ番号
     public List<GameObject> indSlide = new List<GameObject>(); //独立パーツ番号
     public List<GameObject> parentSlide = new List<GameObject>(); //独立パーツ番号
+
+
+
+    public GameObject finfinslide;
     public GameObject finishslide;
 
 
@@ -61,16 +66,28 @@ public class SceneManager : MonoBehaviour
     public Text volumetext;
 
     public Text pidtext;
+    public Text pidtext2;
+    public Text pidtext3;
+
     public Text pnoritext;
     public Text pvolumetext;
     public Text ppartstext;
 
     public Image indinfoimg;
 
+    public Image cut1;
+    public Image cut2;
+    public Sprite defoimg;
 
     public Image parentinfoimg;
 
     public List<Image> colorlist = new List<Image>(); //独立パーツ番号
+    public List<Image> imlist = new List<Image>();
+
+
+    public List<Image> norilist = new List<Image>();
+
+    public List<Text> vtex = new List<Text>();
 
     public Image indColor;
     public Image PColor;
@@ -122,12 +139,30 @@ public class SceneManager : MonoBehaviour
                         setupSlide[stateindex].SetActive(true);
 
                         // noriinfotext.text = 
-                        string t = "必要なのり:";
+                        string t = "";
                         for (int k = 0; k < guideData.parent_noriwidth.Count; k++)
                         {
-                            t += guideData.parent_noriheight[k].ToString();
+                            bool fl = false;
+                            for (int l = 0; l < k; l++)
+                            {
+                                if(guideData.parent_noriheight[k] == guideData.parent_noriheight[l])
+                                {
+                                    fl = true;
+                                }
+                            }
+
+                            if (fl)
+                            {
+                                break;
+                            }
 
 
+                                t += guideData.parent_noriheight[k].ToString();
+
+
+                            int nm = guideData.parent_noriheight.Count(s => s.Contains(guideData.parent_noriheight[k].ToString()))+ guideData.ind_noriheight.Count(s => s.Contains(guideData.parent_noriheight[k].ToString()));
+
+                            t += " " + nm + " 枚";
                             t += "\n";
 
                             //Debug.Log(guideData.parent_indid[j - 1][k]);
@@ -136,43 +171,104 @@ public class SceneManager : MonoBehaviour
 
                         for (int k = 0; k < guideData.ind_noriwidth.Count; k++)
                         {
+                            bool fl = false;
+                            for (int l = 0; l < guideData.parent_noriwidth.Count; l++)
+                            {
+                                if (guideData.ind_noriheight[k] == guideData.parent_noriheight[l])
+                                {
+                                    fl = true;
+                                }
+                            }
+
+                            for (int l = 0; l < k; l++)
+                            {
+                                if (guideData.ind_noriheight[k] == guideData.ind_noriheight[l])
+                                {
+                                    fl = true;
+                                }
+                            }
+
+                            if (fl)
+                            {
+                                break;
+                            }
+
+
+
                             t += guideData.ind_noriheight[k].ToString();
+
+
+                            int nm = guideData.parent_noriheight.Count(s => s.Contains(guideData.ind_noriheight[k].ToString())) + guideData.ind_noriheight.Count(s => s.Contains(guideData.ind_noriheight[k].ToString()));
+
+                            t += " " + nm + " 枚";
                             t += "\n";
 
 
                             //Debug.Log(guideData.parent_indid[j - 1][k]);
                         }
 
+
+
                         noriinfotext.text = t;
 
 
                         int n = 0;
-
-
-                        t = "必要なごはん:";
-                        for (int k = 0; k < guideData.parent_noriheight.Count; k++)
+                        t = "";
+                        for (int k = 0; k < guideData.comp_rice.Count; k++)
                         {
-                            t += guideData.parent_noriwidth[k].ToString();
+                            t += guideData.comp_rice[k].ToString();
 
                             t += "g\n";
 
 
-                            colorlist[n].color = guideData.parent_color[k];
+                            colorlist[k].color = guideData.comp_color[k];
                             n++;
                         }
 
-                        for (int k = 0; k < guideData.ind_noriheight.Count; k++)
-                        {
-                            t += guideData.ind_noriwidth[k].ToString();
+                        t += "------------------\n";
+                        t += "合計　　" + guideData.comp_rice.Sum().ToString()+"g";
+                        /* for (int k = 0; k < guideData.parent_noriheight.Count; k++)
+                         {
+                             t += guideData.parent_noriwidth[k].ToString();
 
-                            t += "g\n";
+                             t += "g\n";
 
 
-                            colorlist[n].color = guideData.ind_color[k];
-                            n++;
-                        }
+                             colorlist[n].color = guideData.parent_color[k];
+                             n++;
+                         }
+
+                         for (int k = 0; k < guideData.ind_noriheight.Count; k++)
+                         {
+                             t += guideData.ind_noriwidth[k].ToString();
+
+                             t += "g\n";
+
+
+                             colorlist[n].color = guideData.ind_color[k];
+                             n++;
+                         }*/
 
                         volumeinfotext.text = t;
+                        int rn=0;
+                        for (int k = 0; k < guideData.ind_image.Count; k++) {
+                            Debug.Log("k"+k);
+                            Debug.Log(guideData.ind_image.Count - k - 1);
+                            imlist[k].sprite = Sprite.Create((Texture2D)guideData.ind_image[guideData.ind_image.Count - k-1], new Rect(0, 0, guideData.ind_image[guideData.ind_image.Count - k-1].width, guideData.ind_image[guideData.ind_image.Count - k-1].height), Vector2.zero);
+                            //imlist[k].sprite = Sprite.Create((Texture2D)guideData.ind_image[0], new Rect(0, 0, guideData.ind_image[0].width, guideData.ind_image[0].height), Vector2.zero);
+                            vtex[k].text = guideData.ind_noriwidth[guideData.ind_image.Count - k - 1].ToString()+"g";
+                            rn = k;
+                        }
+
+
+                        for (int k = 0; k < guideData.parent_image.Count; k++)
+                        {
+
+                            imlist[k+rn+1].sprite = Sprite.Create((Texture2D)guideData.parent_image[guideData.parent_image.Count - k - 1], new Rect(0, 0, guideData.parent_image[guideData.parent_image.Count - k - 1].width, guideData.parent_image[guideData.parent_image.Count - k - 1].height), Vector2.zero);
+                            //imlist[k].sprite = Sprite.Create((Texture2D)guideData.ind_image[0], new Rect(0, 0, guideData.ind_image[0].width, guideData.ind_image[0].height), Vector2.zero);
+                            vtex[k + rn + 1].text = guideData.parent_noriwidth[guideData.parent_image.Count - k - 1].ToString() + "g";
+
+                        }
                         break;
 
                     default:
@@ -197,12 +293,33 @@ public class SceneManager : MonoBehaviour
                     case 1:
                         Debug.Log("処理2-1");
                         indSlide[stateindex - 1].SetActive(true);
-                        //  indSlide[stateindex].SetActive(true);
+                          indSlide[stateindex].SetActive(false);
                         indinfoimg.sprite = Sprite.Create((Texture2D)guideData.ind_image[i-1], new Rect(0, 0, guideData.ind_image[i - 1].width, guideData.ind_image[i - 1].height), Vector2.zero);
 
                         noritext.text = "のり：" + guideData.ind_noriheight[i-1]+"";
                         volumetext.text = "ごはん："+guideData.ind_noriwidth[i-1]+"g";
                         indColor.color = guideData.ind_color[i - 1];
+
+                        if (guideData.ind_shapeid[i - 1] == 0)
+                        {
+                            //半切り
+                            indinfoimg.sprite = defoimg;
+                            indinfoimg.color = guideData.ind_color[i - 1];
+                           
+                        }
+                        else
+                        {
+                            stateindex += 100;
+                        }
+                        break;
+
+                    case 2:
+                        indSlide[stateindex - 1].SetActive(true);
+                        indSlide[stateindex - 2].SetActive(false);
+                        cut1.color = guideData.ind_color[i - 1];
+                        cut2.color = guideData.ind_color[i - 1];
+
+
                         break;
 
 
@@ -226,7 +343,11 @@ public class SceneManager : MonoBehaviour
             case OVERALL_STATUS.PARENT_PARTS:
                 indSlide[0].SetActive(false);
                 int j = guideData.parent_id.Count - stateparid;
-                pidtext.text = "親パーツ作成" + j.ToString() + " / " + guideData.parent_id.Count;
+
+                pidtext.text = "親パーツ作成" + (stateparid+1).ToString() + " / " + guideData.parent_id.Count;
+                pidtext2.text = "親パーツ作成" + (stateparid + 1).ToString() + " / " + guideData.parent_id.Count;
+                pidtext3.text = "親パーツ作成" + (stateparid + 1).ToString() + " / " + guideData.parent_id.Count;
+
                 if (stateindex == 3)
                 {
                     if (pcount < guideData.parent_num[j - 1]-1)
@@ -270,7 +391,13 @@ public class SceneManager : MonoBehaviour
                         parentSlide[stateindex - 2].SetActive(false);
                         parentSlide[stateindex-1].SetActive(true);
                         ppimg2.sprite = Sprite.Create((Texture2D)guideData.parent_img2[j - 1][pcount], new Rect(0, 0, guideData.parent_img2[j - 1][pcount].width, guideData.parent_img2[j - 1][pcount].height), Vector2.zero);
-                        ppimg3.sprite = Sprite.Create((Texture2D)guideData.ind_image[pcount], new Rect(0, 0, guideData.ind_image[pcount].width, guideData.ind_image[pcount].height), Vector2.zero);
+                        if (true) {
+                            ppimg3.sprite = Sprite.Create((Texture2D)guideData.ind_image[pcount], new Rect(0, 0, guideData.ind_image[pcount].width, guideData.ind_image[pcount].height), Vector2.zero);
+                        }
+                        else
+                        {
+                            ppimg3.sprite = Sprite.Create((Texture2D)guideData.parent_image[pcount], new Rect(0, 0, guideData.ind_image[pcount].width, guideData.ind_image[pcount].height), Vector2.zero);
+                        }
                         break;
 
                     case 3:
@@ -311,13 +438,20 @@ public class SceneManager : MonoBehaviour
                 switch (stateindex)
                 {
                     case 1:
-                        finishslide.SetActive(true);
+                        finfinslide.SetActive(true);
+
+                        for (int k = 0; k < guideData.nori_image.Count; k++)
+                        {
+
+                            norilist[k].sprite = Sprite.Create((Texture2D)guideData.nori_image[k], new Rect(0, 0, guideData.nori_image[k].width, guideData.nori_image[k].height), Vector2.zero);
+                        }
                         Debug.Log("Finish");
                         break;
 
                     case 2:
                         Debug.Log("処理2-2");
-
+                        finfinslide.SetActive(false);
+                        finishslide.SetActive(true);
                         break;
 
                     default:
