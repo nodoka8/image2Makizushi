@@ -195,6 +195,7 @@ def div_parts(imagename):
     size_nori = calc_size(contours)[1]
     nori_base_size = size_nori[1]
     rice_base_size = size_rice[1]
+
     for i in range(len(contours)):
         line_imagename_list = ""
         partsimage = image2parts(imagename, contours, i)
@@ -217,7 +218,7 @@ def div_parts(imagename):
         color_mode = str(float(r/255))+","+str(float(g/255))+","+str(float(b/255))+",1.0"
 
         #入力画像(0)と完成イメージ(1)
-        if i == 1 and i == 0:
+        if i == 1 or i == 0:
             partsimage[0].save("test/Image2Makizushi_Data/input_image/" + partsimage[1] + '.png')
 
         #その他
@@ -227,9 +228,10 @@ def div_parts(imagename):
         #ノリ枚数分母
         nori_mai = 2*int(nori_base_size/size_nori[i])
         #ノリ枚数の分母>4の場合は後付けパーツ(0)
-        if nori_mai > 4:
+        if nori_mai > 8:
             hierarchy[i][2] = 0
-            data[hierarchy[i][3]][4] = -1
+            if data[hierarchy[i][3]][4] == i:
+                data[hierarchy[i][3]][4] = hierarchy[i][0]
 
         
         data.append([i, partsimage[1] + ".png", "うんこ", matches[i], hierarchy[i][2], hierarchy[i][3], color_mode, count_child(i, hierarchy), round(260*size_rice[i]/rice_base_size), "'1/"+str(nori_mai), "うんこ", line_imagename_list[:-2]])
