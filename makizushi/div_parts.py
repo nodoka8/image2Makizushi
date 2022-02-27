@@ -121,8 +121,9 @@ def calc_size(contours):
 def count_child(n, hierarchy):
     count = 0
     for i in range(len(hierarchy)):
-        if hierarchy[i][3] == n:
-            count = count + 1
+        if hierarchy[i][2] != 0:
+            if hierarchy[i][3] == n:
+                count = count + 1
     return count
 
 #求めた輪郭情報をもとにパーツのトリミング
@@ -158,6 +159,7 @@ def resipi_line_image(contours):
         for l in range(3):
             for k in range(line_image.width):
                 line_image.putpixel((k, y_min+l-2), (0, 255, 255))
+        #pillow読み込みからopencv読み込み
         line_image.save("line_image_a/line_image" + str(i) + ".png")
         y_image = cv2.imread("line_image_a/line_image" + str(i) + ".png")
         _, width, _ = y_image.shape[:3]
@@ -182,29 +184,32 @@ def div_parts(imagename):
     ch = find_contours(imagename, 0)
     contours = ch[0]
     hierarchy = ch[1]
-    with open('hierarchy.csv', "w", encoding="utf_8_sig") as f:
+    with open('hierarchy1.csv', "w", encoding="utf_8_sig") as f:
         writer = csv.writer(f)
-        writer.writerow([hierarchy[0][2], hierarchy[0][3]])
-    for i in range(len(contours)-1):
-        with open('hierarchy.csv', "a", encoding="utf_8_sig") as f:
-            writer = csv.writer(f)
-            writer.writerow([hierarchy[i+1][2], hierarchy[i+1][3]])
+        writer.writerows(hierarchy)
     line_imagename = resipi_line_image(contours)
     matches = app_shape(contours)
     size_rice = calc_size(contours)[0]
     size_nori = calc_size(contours)[1]
     nori_base_size = size_nori[1]
     rice_base_size = size_rice[1]
+    with open('test/Image2Makizushi_Data/parts_defo.csv', "w", encoding="utf_8_sig", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(["パーツ番号", "パーツ画像", "ID変換画像", "形状番号", "独立(-1)後付け(0)", "親パーツ番号", "色", "内包パーツ数", "ご飯の量", "海苔のサイズ", "パーツの最下部", "ガイドライン付き画像"])
 
     for i in range(len(contours)):
-        line_imagename_list = ""
         partsimage = image2parts(imagename, contours, i)
-        for j in range(len(contours)):
-            if hierarchy[j][3] == i:
-                resipi_line_partsimage = image2parts("line_image/" + line_imagename[j], contours, i)
-                #ガイドラインイメージ保存
-                resipi_line_partsimage[0].save("test/Image2Makizushi_Data/resipi_line_image/" + resipi_line_partsimage[1].split("/")[1] + '.png')
-                line_imagename_list = line_imagename_list + resipi_line_partsimage[1].split("/")[1] + '.png, '
+
+        #ノリ枚数分母
+        nori_mai = 2*int(nori_base_size/size_nori[i])
+        #ノリ枚数の分母>4の場合は後付けパーツ(0)
+        if nori_mai > 8:
+            hierarchy[i][2] = 0
+            if hierarchy[hierarchy[i][3]][2] == i:
+                hierarchy[hierarchy[i][3]][2] = hierarchy[i][0]
+        with open('hierarchy2-' + str(i) + '.csv', "w", encoding="utf_8_sig") as f:
+            writer = csv.writer(f)
+            writer.writerows(hierarchy)
 
         small_img = partsimage[0].resize((100, 100))
         color_arr = np.array(small_img)
@@ -225,17 +230,25 @@ def div_parts(imagename):
         else:
             partsimage[0].save("test/Image2Makizushi_Data/parts_image/" + partsimage[1] + '.png')
 
-        #ノリ枚数分母
-        nori_mai = 2*int(nori_base_size/size_nori[i])
-        #ノリ枚数の分母>4の場合は後付けパーツ(0)
-        if nori_mai > 8:
-            hierarchy[i][2] = 0
-            if data[hierarchy[i][3]][4] == i:
-                data[hierarchy[i][3]][4] = hierarchy[i][0]
+        data.append([i, partsimage[1] + ".png", "dummy", matches[i], "child", "parent", color_mode, "count_child", round(260*size_rice[i]/rice_base_size), "'1/"+str(nori_mai), "dummy", "line_imagename_list"])
+        with open('test/Image2Makizushi_Data/parts_defo.csv', "a", encoding="utf_8_sig", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow([i, partsimage[1] + ".png", "dummy", matches[i], "child", "parent", color_mode, "count_child", round(260*size_rice[i]/rice_base_size), "'1/"+str(nori_mai), "dummy", "line_imagename_list"])
 
+    for i in range(len(data)):
+        line_imagename_list = ""
+        data[i][4] = hierarchy[i][2]
+        data[i][5] = hierarchy[i][3]
+        for j in range(len(data)):
+            if hierarchy[j][2] != 0:
+                if hierarchy[j][3] == i:
+                    resipi_line_partsimage = image2parts("line_image/" + line_imagename[j], contours, i)
+                    #ガイドラインイメージ保存
+                    resipi_line_partsimage[0].save("test/Image2Makizushi_Data/resipi_line_image/" + resipi_line_partsimage[1].split("/")[1] + '.png')
+                    line_imagename_list = line_imagename_list + resipi_line_partsimage[1].split("/")[1] + '.png, '
+        data[i][7] = count_child(i, hierarchy)
+        data[i][11] = line_imagename_list
         
-        data.append([i, partsimage[1] + ".png", "うんこ", matches[i], hierarchy[i][2], hierarchy[i][3], color_mode, count_child(i, hierarchy), round(260*size_rice[i]/rice_base_size), "'1/"+str(nori_mai), "うんこ", line_imagename_list[:-2]])
-
     for k in range(len(data)):
         #独立パーツ番号編集
         if data[k][4] == -1:
