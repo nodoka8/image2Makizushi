@@ -240,6 +240,10 @@ def div_parts(imagename):
         data[i][4] = hierarchy[i][2]
         data[i][5] = hierarchy[i][3]
         for j in range(len(data)):
+            if hierarchy[i][2] != 0 and hierarchy[i][2] != -1 and hierarchy[j][3] == i and hierarchy[j][2] != 0:
+                if i == 1:
+                    print(data[i][8])
+                data[i][8] = data[i][8] - data[j][8]
             if hierarchy[j][2] != 0:
                 if hierarchy[j][3] == i:
                     resipi_line_partsimage = image2parts("line_image/" + line_imagename[j], contours, i)
