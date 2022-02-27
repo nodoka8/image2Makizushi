@@ -55,33 +55,33 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11380}
     - Class: 114
-      Script: {instanceID: 11416}
+      Script: {instanceID: 11414}
     - Class: 114
-      Script: {instanceID: 11762}
+      Script: {instanceID: 11760}
     - Class: 114
-      Script: {instanceID: 11814}
+      Script: {instanceID: 11812}
     - Class: 114
-      Script: {instanceID: 12598}
+      Script: {instanceID: 12596}
     - Class: 114
-      Script: {instanceID: 12670}
+      Script: {instanceID: 12668}
     - Class: 114
-      Script: {instanceID: 12784}
+      Script: {instanceID: 12782}
     - Class: 114
-      Script: {instanceID: 13488}
+      Script: {instanceID: 13486}
     - Class: 114
-      Script: {instanceID: 13536}
+      Script: {instanceID: 13534}
     - Class: 114
-      Script: {instanceID: 13938}
+      Script: {instanceID: 13936}
     - Class: 114
-      Script: {instanceID: 13962}
+      Script: {instanceID: 13960}
     - Class: 114
-      Script: {instanceID: 14456}
+      Script: {instanceID: 14454}
     - Class: 114
-      Script: {instanceID: 14800}
+      Script: {instanceID: 14798}
     - Class: 114
-      Script: {instanceID: 15010}
+      Script: {instanceID: 15008}
     - Class: 114
-      Script: {instanceID: 15216}
+      Script: {instanceID: 15214}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -812,4 +812,4 @@ ScriptsOnlyBuild:
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: "C:/Users/cerez/OneDrive/\u30C9\u30AD\u30E5\u30E1\u30F3\u30C8/Github/image2Makizushi/makizushi/test3/Image2Makizushi.exe"
+  playerPath: "C:/Users/cerez/OneDrive/\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7/testes/Image2Makizushi.exe"

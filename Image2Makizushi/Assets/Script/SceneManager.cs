@@ -405,12 +405,13 @@ public class SceneManager : MonoBehaviour
                         parentSlide[stateindex-1].SetActive(true);
 
                         ppimg2.sprite = Sprite.Create((Texture2D)guideData.parent_img2[j - 1][pcount], new Rect(0, 0, guideData.parent_img2[j - 1][pcount].width, guideData.parent_img2[j - 1][pcount].height), Vector2.zero);
-                        if (true) {
+                        if (guideData.ind_image[pcount] != null) {
                             ppimg3.sprite = Sprite.Create((Texture2D)guideData.ind_image[pcount], new Rect(0, 0, guideData.ind_image[pcount].width, guideData.ind_image[pcount].height), Vector2.zero);
+                            guideData.ind_image[pcount] = null;
                         }
                         else
                         {
-                            ppimg3.sprite = Sprite.Create((Texture2D)guideData.parent_image[pcount], new Rect(0, 0, guideData.ind_image[pcount].width, guideData.ind_image[pcount].height), Vector2.zero);
+                            ppimg3.sprite = Sprite.Create((Texture2D)guideData.parent_image[pcount+1], new Rect(0, 0, guideData.parent_image[pcount+1].width, guideData.parent_image[pcount+1].height), Vector2.zero);
                         }
                         break;
 
