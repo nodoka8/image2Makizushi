@@ -30,7 +30,7 @@ public class SceneManager : MonoBehaviour
     public int stateindid;
     public int stateparid;
 
-
+    public bool flaggg=false;
     public OVERALL_STATUS oVERALL_STATUS;
 
     public CSVLoader CSVLoader;
@@ -97,6 +97,8 @@ public class SceneManager : MonoBehaviour
     public Image ppimg2;
     public Image ppimg3;
     public Text pptext;
+
+    public Image ppimg4;
 
 
     public Image rollimg;
@@ -177,6 +179,7 @@ public class SceneManager : MonoBehaviour
                                 if (guideData.ind_noriheight[k] == guideData.parent_noriheight[l])
                                 {
                                     fl = true;
+                                    Debug.Log("oya:" + guideData.parent_noriheight[k]);
                                 }
                             }
 
@@ -185,15 +188,17 @@ public class SceneManager : MonoBehaviour
                                 if (guideData.ind_noriheight[k] == guideData.ind_noriheight[l])
                                 {
                                     fl = true;
+                                    Debug.Log("dokuritu:"+guideData.ind_noriheight[k]);
                                 }
                             }
 
                             if (fl)
                             {
-                                break;
+                                Debug.Log("break"+ guideData.ind_noriheight[k]);
+                                continue;
                             }
 
-
+                            Debug.Log("roop"+k);
 
                             t += guideData.ind_noriheight[k].ToString();
 
@@ -300,7 +305,7 @@ public class SceneManager : MonoBehaviour
                         volumetext.text = "ごはん："+guideData.ind_noriwidth[i-1]+"g";
                         indColor.color = guideData.ind_color[i - 1];
 
-                        if (guideData.ind_shapeid[i - 1] == 0)
+                        if (guideData.ind_shapeid[i - 1] == 4)
                         {
                             //半切り
                             indinfoimg.sprite = defoimg;
@@ -360,6 +365,13 @@ public class SceneManager : MonoBehaviour
                     {
                         pcount = 0;
                     }
+
+                    if(pcount == guideData.parent_num[j - 1] - 1&& !flaggg)
+                    {
+                        stateindex = 5;
+                        flaggg = true;
+                        //pcount = -10;
+                    }
                 }
                 switch (stateindex)
                 {
@@ -368,6 +380,7 @@ public class SceneManager : MonoBehaviour
                         parentSlide[parentSlide.Count-1].SetActive(false);
                         parentSlide[stateindex - 1].SetActive(true);
                         parentSlide[stateindex].SetActive(false);
+                        parentSlide[2].SetActive(false);
 
                         pnoritext.text = "のり：" + guideData.parent_noriheight[j - 1] + "";
                         pvolumetext.text = "ごはん：" + guideData.parent_noriwidth[j - 1] + "g";
@@ -390,6 +403,7 @@ public class SceneManager : MonoBehaviour
                         Debug.Log("処理3-2");
                         parentSlide[stateindex - 2].SetActive(false);
                         parentSlide[stateindex-1].SetActive(true);
+
                         ppimg2.sprite = Sprite.Create((Texture2D)guideData.parent_img2[j - 1][pcount], new Rect(0, 0, guideData.parent_img2[j - 1][pcount].width, guideData.parent_img2[j - 1][pcount].height), Vector2.zero);
                         if (true) {
                             ppimg3.sprite = Sprite.Create((Texture2D)guideData.ind_image[pcount], new Rect(0, 0, guideData.ind_image[pcount].width, guideData.ind_image[pcount].height), Vector2.zero);
@@ -404,12 +418,26 @@ public class SceneManager : MonoBehaviour
                         Debug.Log("処理3-3");
                         parentSlide[stateindex - 2].SetActive(false);
                         parentSlide[stateindex-1].SetActive(true);
+                        parentSlide[3].SetActive(false);
+
                         rollimg.sprite = Sprite.Create((Texture2D)guideData.parent_image[j - 1], new Rect(0, 0, guideData.parent_image[j - 1].width, guideData.parent_image[j - 1].height), Vector2.zero);
+                        break;
+
+                    case 5:
+                        Debug.Log("処理3-4");
+                        parentSlide[stateindex - 4].SetActive(false);
+                        parentSlide[stateindex - 2].SetActive(true);
+                        stateindex = 2;
+                        ppimg4.sprite = Sprite.Create((Texture2D)guideData.parent_image[j - 1], new Rect(0, 0, guideData.parent_image[j - 1].width, guideData.parent_image[j - 1].height), Vector2.zero);
+
+
+                        //rollimg.sprite = Sprite.Create((Texture2D)guideData.parent_image[j - 1], new Rect(0, 0, guideData.parent_image[j - 1].width, guideData.parent_image[j - 1].height), Vector2.zero);
                         break;
 
                     default:
                         stateindex = 0;
                         stateparid += 1;
+                        flaggg = false;
                         //oVERALL_STATUS = OVERALL_STATUS.FINISH;
                         if (stateparid > guideData.parent_id.Count - 1)
                         //if (stateindid > 2)

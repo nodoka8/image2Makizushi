@@ -48,7 +48,6 @@ public class CSVLoader : MonoBehaviour
         {
             string line = reader.ReadLine(); // 一行ずつ読み込み
             csvDatas.Add(line.Split(',')); // , 区切りでリストに追加
-
         }
         
         // csvDatas[行][列]を指定して値を自由に取り出せる
@@ -87,7 +86,7 @@ public class CSVLoader : MonoBehaviour
 
                                 guideData.ind_id.Add(int.Parse(arr[0]));
                                 guideData.ind_shapeid.Add(int.Parse(arr[3]));
-
+                            Debug.Log("mori1");
                            // arr[6].Replace("","");
                               // Debug.Log(arr[6].Trim(new char[] { '"' }));
                                 Color color = new Color(float.Parse(arr[6].Trim(new char[] { '"' })), float.Parse(arr[7]), float.Parse(arr[8]), float.Parse(arr[9].Trim(new char[] { '"' })));
@@ -102,24 +101,29 @@ public class CSVLoader : MonoBehaviour
                                 guideData.comp_rice.Add(float.Parse(arr[11]));
 
                             }
+                            Debug.Log("mori11");
 
                             guideData.ind_color.Add(color);
 
                                 guideData.ind_noriwidth.Add(float.Parse(arr[11]));
                                 guideData.ind_noriheight.Add(arr[12]);
-
-                                Texture2D tex = readByBinary(readPngFile(Application.dataPath + "/parts_image/" + arr[1]));
+                            Debug.Log("mori12");
+                            Texture2D tex = readByBinary(readPngFile(Application.dataPath + "/parts_image/" + arr[1]));
                                 guideData.ind_image.Add(tex);
                             //image.sprite = null;
                                 image.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero);
+                            Debug.Log("mori13");
 
-                                guideData.parent_indid[int.Parse(arr[5])].Add(int.Parse(arr[0]));
-                                guideData.ind_y.Add(int.Parse(arr[13]));
+                            guideData.parent_indid[int.Parse(arr[5])].Add(int.Parse(arr[0]));
+                               // guideData.ind_y.Add(int.Parse(arr[13]));
                             //image.overrideSprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), Vector2.zero); 
                             //Debug.Log(tex);
-                                //img.texture = tex;
-                            }
-                            else if (int.Parse(arr[4]) != 0)
+                            //img.texture = tex;
+
+                            Debug.Log("mori2");
+
+                        }
+                        else if (int.Parse(arr[4]) != 0)
                              {
                                 guideData.parent_id.Add(int.Parse(arr[0]));
                                 guideData.parent_num.Add(int.Parse(arr[10]));
@@ -172,10 +176,11 @@ public class CSVLoader : MonoBehaviour
                                     Debug.Log("yomikomi" + i);
 
                                 }
+                                Debug.Log("yomikonda1");
                             }
                                 guideData.parent_img2.Add(ll);
-                                guideData.parent_y.Add(int.Parse(arr[13]));
-
+                               // guideData.parent_y.Add(int.Parse(arr[13]));
+                            Debug.Log("yomikonda");
                             // texserch(tex2);
                         }
                         else
