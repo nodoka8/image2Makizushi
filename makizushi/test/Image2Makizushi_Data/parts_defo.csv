@@ -1,0 +1,10 @@
+﻿パーツ番号,パーツ画像,ID変換画像,形状番号,独立(-1)後付け(0),親パーツ番号,色,内包パーツ数,ご飯の量,海苔のサイズ,パーツの最下部,ガイドライン付き画像
+0,tanuki0.png,dummy,1,child,parent,"1.0,1.0,1.0,1.0",count_child,421,'1/0,dummy,line_imagename_list
+1,tanuki1.png,dummy,6,child,parent,"1.0,1.0,1.0,1.0",count_child,260,'1/2,dummy,line_imagename_list
+2,tanuki2.png,dummy,1,child,parent,"0.4980392156862745,0.3764705882352941,0.06274509803921569,1.0",count_child,142,'1/2,dummy,line_imagename_list
+3,tanuki3.png,dummy,0,child,parent,"1.0,1.0,1.0,1.0",count_child,63,'1/2,dummy,line_imagename_list
+4,tanuki4.png,dummy,6,child,parent,"0.0,0.0,0.0,1.0",count_child,2,'1/10,dummy,line_imagename_list
+5,tanuki5.png,dummy,1,child,parent,"0.0,0.0,0.0,1.0",count_child,2,'1/22,dummy,line_imagename_list
+6,tanuki6.png,dummy,1,child,parent,"0.0,0.0,0.0,1.0",count_child,2,'1/22,dummy,line_imagename_list
+7,tanuki7.png,dummy,4,child,parent,"0.4980392156862745,0.3764705882352941,0.06274509803921569,1.0",count_child,13,'1/6,dummy,line_imagename_list
+8,tanuki8.png,dummy,4,child,parent,"0.4980392156862745,0.3764705882352941,0.06274509803921569,1.0",count_child,14,'1/6,dummy,line_imagename_list
