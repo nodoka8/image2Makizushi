@@ -46,7 +46,7 @@ def img2bw(imagename):
 
 #-------csv書き込み--------
 def csv_w(row, mode):
-    with open('parts.csv', mode, encoding="utf_8_sig") as f:
+    with open('test/Image2Makizushi_Data/parts.csv', mode, encoding="utf_8_sig", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(row)
 
@@ -202,7 +202,7 @@ def div_parts(imagename):
             if hierarchy[j][3] == i:
                 resipi_line_partsimage = image2parts("line_image/" + line_imagename[j], contours, i)
                 #ガイドラインイメージ保存
-                resipi_line_partsimage[0].save("resipi_line_image/" + resipi_line_partsimage[1].split("/")[1] + '.png')
+                resipi_line_partsimage[0].save("test/Image2Makizushi_Data/resipi_line_image/" + resipi_line_partsimage[1].split("/")[1] + '.png')
                 line_imagename_list = line_imagename_list + resipi_line_partsimage[1].split("/")[1] + '.png, '
 
         small_img = partsimage[0].resize((100, 100))
@@ -218,11 +218,11 @@ def div_parts(imagename):
 
         #入力画像(0)と完成イメージ(1)
         if i == 1 and i == 0:
-            partsimage[0].save("input_image/" + partsimage[1] + '.png')
+            partsimage[0].save("test/Image2Makizushi_Data/input_image/" + partsimage[1] + '.png')
 
         #その他
         else:
-            partsimage[0].save("parts_image/" + partsimage[1] + '.png')
+            partsimage[0].save("test/Image2Makizushi_Data/parts_image/" + partsimage[1] + '.png')
 
         #ノリ枚数分母
         nori_mai = 2*int(nori_base_size/size_nori[i])
@@ -266,7 +266,7 @@ def div_parts(imagename):
     for j in data:
         if j[4] == -1:
             csv_w(j, "a")
-    
+
     #その下に後付けパーツ
     for j in data:
         if j[4] == 0:
