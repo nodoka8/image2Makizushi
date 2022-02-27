@@ -50,7 +50,7 @@ public class CSVLoader : MonoBehaviour
             csvDatas.Add(line.Split(',')); // , 区切りでリストに追加
 
         }
-
+        
         // csvDatas[行][列]を指定して値を自由に取り出せる
         Debug.Log(csvDatas[0][1]);
     }
